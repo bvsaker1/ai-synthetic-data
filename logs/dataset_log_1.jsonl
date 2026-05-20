@@ -1,0 +1,44 @@
+{"timestamp": "2026-05-05T00:16:45.479280+00:00", "message": "Generating 10 items from each of 5 templates (50 total raw rows)..."}
+{"timestamp": "2026-05-05T00:16:45.479560+00:00", "message": "Generating 10 items from appliance_repair...", "category": "appliance"}
+{"timestamp": "2026-05-05T00:16:50.528561+00:00", "message": "  Instructor validated 10 items from appliance_repair", "category": "appliance_repair"}
+{"timestamp": "2026-05-05T00:16:50.528723+00:00", "message": "  Collected 10/10 raw items from appliance_repair (LLM call 1)", "category": "appliance_repair"}
+{"timestamp": "2026-05-05T00:16:50.528983+00:00", "message": "Saved 10 rows from appliance_repair to raw_diy_dataset_1.jsonl", "category": "appliance"}
+{"timestamp": "2026-05-05T00:16:50.529033+00:00", "message": "Generating 10 items from electrical_repair...", "category": "electrical"}
+{"timestamp": "2026-05-05T00:16:56.462051+00:00", "message": "  Instructor validated 10 items from electrical_repair", "category": "electrical_repair"}
+{"timestamp": "2026-05-05T00:16:56.462289+00:00", "message": "  Collected 10/10 raw items from electrical_repair (LLM call 1)", "category": "electrical_repair"}
+{"timestamp": "2026-05-05T00:16:56.462985+00:00", "message": "Saved 10 rows from electrical_repair to raw_diy_dataset_1.jsonl", "category": "electrical"}
+{"timestamp": "2026-05-05T00:16:56.463030+00:00", "message": "Generating 10 items from plumbing_repair...", "category": "plumbing"}
+{"timestamp": "2026-05-05T00:17:01.953571+00:00", "message": "  Instructor validated 10 items from plumbing_repair", "category": "plumbing_repair"}
+{"timestamp": "2026-05-05T00:17:01.953729+00:00", "message": "  Collected 10/10 raw items from plumbing_repair (LLM call 1)", "category": "plumbing_repair"}
+{"timestamp": "2026-05-05T00:17:01.954316+00:00", "message": "Saved 10 rows from plumbing_repair to raw_diy_dataset_1.jsonl", "category": "plumbing"}
+{"timestamp": "2026-05-05T00:17:01.954364+00:00", "message": "Generating 10 items from hvac_maintenance...", "category": "hvac"}
+{"timestamp": "2026-05-05T00:17:07.924808+00:00", "message": "  Instructor validated 10 items from hvac_maintenance", "category": "hvac_maintenance"}
+{"timestamp": "2026-05-05T00:17:07.924976+00:00", "message": "  Collected 10/10 raw items from hvac_maintenance (LLM call 1)", "category": "hvac_maintenance"}
+{"timestamp": "2026-05-05T00:17:07.925548+00:00", "message": "Saved 10 rows from hvac_maintenance to raw_diy_dataset_1.jsonl", "category": "hvac"}
+{"timestamp": "2026-05-05T00:17:07.925644+00:00", "message": "Generating 10 items from general_home_repair...", "category": "general_home"}
+{"timestamp": "2026-05-05T00:17:18.987910+00:00", "message": "  Instructor validated 10 items from general_home_repair", "category": "general_home_repair"}
+{"timestamp": "2026-05-05T00:17:18.988060+00:00", "message": "  Collected 10/10 raw items from general_home_repair (LLM call 1)", "category": "general_home_repair"}
+{"timestamp": "2026-05-05T00:17:18.988623+00:00", "message": "Saved 10 rows from general_home_repair to raw_diy_dataset_1.jsonl", "category": "general_home"}
+{"timestamp": "2026-05-05T00:17:18.988668+00:00", "message": "Finished raw generation. Saved 50 rows to raw_diy_dataset_1.jsonl"}
+{"timestamp": "2026-05-05T00:21:55.622057+00:00", "message": "Deduplicating raw dataset from raw_diy_dataset_1.jsonl"}
+{"timestamp": "2026-05-05T00:21:55.625088+00:00", "message": "Deduplication complete. unique=50, duplicates=0, invalid=0. Saved deduped rows to diy_dataset_1.jsonl and duplicate/error rows to invalid_diy_dataset_1.jsonl"}
+{"timestamp": "2026-05-05T00:37:20.080780+00:00", "message": "Deduplicating raw dataset from /tmp/test_dedup_input.jsonl"}
+{"timestamp": "2026-05-05T00:37:20.081185+00:00", "message": "Loading embedding model: all-MiniLM-L6-v2"}
+{"timestamp": "2026-05-05T00:37:24.744025+00:00", "message": "Deduplicating raw dataset from /tmp/test_dedup_input.jsonl"}
+{"timestamp": "2026-05-05T00:37:24.744168+00:00", "message": "Loading embedding model: all-MiniLM-L6-v2"}
+{"timestamp": "2026-05-05T00:38:34.069237+00:00", "message": "Deduplicating raw dataset from /tmp/test_dedup_input.jsonl"}
+{"timestamp": "2026-05-05T00:38:34.069543+00:00", "message": "Loading embedding model: all-MiniLM-L6-v2"}
+{"timestamp": "2026-05-05T00:38:40.340713+00:00", "message": "Deduplication complete. unique=2, duplicates=1, invalid=0. Saved deduped rows to /tmp/test_dedup_valid.jsonl and duplicate/error rows to /tmp/test_dedup_invalid.jsonl"}
+{"timestamp": "2026-05-05T19:32:03.450157+00:00", "message": "Deduplicating raw dataset from raw_diy_dataset_1.jsonl"}
+{"timestamp": "2026-05-05T19:32:03.450556+00:00", "message": "Loading embedding model: all-MiniLM-L6-v2"}
+{"timestamp": "2026-05-05T19:32:09.192120+00:00", "message": "Deduplication complete. unique=50, duplicates=0, invalid=0. Saved deduped rows to diy_dataset_1.jsonl and duplicate/error rows to invalid_diy_dataset_1.jsonl"}
+{"timestamp": "2026-05-07T00:47:48.108145+00:00", "message": "Running judge with throttling: max_tpm=8000, max_completion_tokens=500, max_retries=5"}
+{"timestamp": "2026-05-07T00:47:48.108981+00:00", "message": "Selection mode: sequential; testing 20/20 items"}
+{"timestamp": "2026-05-07T00:47:49.573393+00:00", "message": "runtime_error", "id": "qa_00015", "judge_scoring": {}, "structural_validation": "failed", "error": "Error code: 400 - {'error': {'message': \"Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': ''}}"}
+{"timestamp": "2026-05-07T00:47:49.573760+00:00", "message": "Judged 1/20: qa_00015 -> UNRESOLVED (1)", "id": "qa_00015", "judge_scoring": {"trace_id": "qa_00015", "incomplete_answer": 0, "safety_violations": 0, "unrealistic_tools": 0, "overcomplicated_solution": 0, "missing_context": 0, "poor_quality_tips": 0, "overall_failure": false, "quality_scores": {"answer_coherence": 1, "step_actionability": 1, "tool_realism": 1, "safety_specificity": 1, "tip_usefulness": 1, "problem_answer_alignment": 1, "appropriate_scope": 1, "category_accuracy": 1}, "quality_pass": true}, "structural_validation": "failed", "status": "UNRESOLVED", "resolved_label": 1}
+{"timestamp": "2026-05-07T00:47:50.762354+00:00", "message": "runtime_error", "id": "qa_00050", "judge_scoring": {}, "structural_validation": "failed", "error": "Error code: 400 - {'error': {'message': \"Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': ''}}"}
+{"timestamp": "2026-05-07T00:47:50.763527+00:00", "message": "Judged 2/20: qa_00050 -> UNRESOLVED (1)", "id": "qa_00050", "judge_scoring": {"trace_id": "qa_00050", "incomplete_answer": 0, "safety_violations": 0, "unrealistic_tools": 0, "overcomplicated_solution": 0, "missing_context": 0, "poor_quality_tips": 0, "overall_failure": false, "quality_scores": {"answer_coherence": 1, "step_actionability": 1, "tool_realism": 1, "safety_specificity": 1, "tip_usefulness": 1, "problem_answer_alignment": 1, "appropriate_scope": 1, "category_accuracy": 1}, "quality_pass": true}, "structural_validation": "failed", "status": "UNRESOLVED", "resolved_label": 1}
+{"timestamp": "2026-05-07T00:47:51.985948+00:00", "message": "runtime_error", "id": "qa_00032", "judge_scoring": {}, "structural_validation": "failed", "error": "Error code: 400 - {'error': {'message': \"Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': ''}}"}
+{"timestamp": "2026-05-07T00:47:51.986244+00:00", "message": "Judged 3/20: qa_00032 -> UNRESOLVED (1)", "id": "qa_00032", "judge_scoring": {"trace_id": "qa_00032", "incomplete_answer": 0, "safety_violations": 0, "unrealistic_tools": 0, "overcomplicated_solution": 0, "missing_context": 0, "poor_quality_tips": 0, "overall_failure": false, "quality_scores": {"answer_coherence": 1, "step_actionability": 1, "tool_realism": 1, "safety_specificity": 1, "tip_usefulness": 1, "problem_answer_alignment": 1, "appropriate_scope": 1, "category_accuracy": 1}, "quality_pass": true}, "structural_validation": "failed", "status": "UNRESOLVED", "resolved_label": 1}
+{"timestamp": "2026-05-07T00:47:51.986693+00:00", "message": "Stopping early after 3 JUDGE_RUNTIME_ERROR results to avoid wasting API calls.", "judge_scoring": {}, "structural_validation": "failed"}
+{"timestamp": "2026-05-07T00:47:51.986839+00:00", "message": "Saved judge labels to judge_labels_1.jsonl"}

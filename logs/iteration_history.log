@@ -1,0 +1,101 @@
+### Iteration 1: Initial Dataset Creation, Validation, Judging
+- **Date**: 2026-05-04
+- **Change**: Created initial dataset using the llama-3.3-70b-versatile model
+                 with various home maintenance tasks in raw_diy_dataset_1.jsonl.
+                 Ran data validation to deduplicate and clean the dataset.
+                 Saved resulting dataset in diy_dataset_1.jsonl with 50 unique entries. 
+                                 
+                Manually created human_labels.jsonl with human evaluations script for a 
+                subset of the dataset to compare against model judgments.
+
+                Ran judge_eval script on the human labels dataset which was a 20 item subset of
+                diy_dataset_1.jsonl. Initial prompts used openai/gpt-oss-120b to 
+                 establish baseline performance metrics.                  
+    
+- **Hypothesis**: There are likely to be differences between human and model 
+                    judgments on the initial dataset, which will help identify 
+                    areas for prompt improvement. 
+
+- **Result**:   LLM Judge Agreement had many run time errors for bad JSON format 
+                and UNRESOLVED for everything. Judge aborted after 3 consecutive failures.
+
+- **Decision**: Result is not acceptable because of the run time errors and 
+                lack of any resolved items.
+
+- **Next step**: Fix the judge prompt run-time errors so that incomplete
+                JSON is not returned from the LLM Judge.
+
+### Iteration 2: Update Judging to Fix Run Time Errors
+- **Date**: 2026-05-07
+- **Change**: Fixed judge prompt to limit judge summary to 30 words added more
+                strict JSON format instructions to prevent incomplete JSON.                 
+    
+- **Hypothesis**: The judge will not runtime error out because of added
+                    completion word limits.
+
+- **Result**: LLM Judge still had 50% run time errors and 100% UNRESOLVED.
+                Judge script terminated early because of 3 run-time failures.
+
+- **Decision**: Unacceptable early termination and JSON parsing errors. 
+
+- **Next step**: Reduce judge summary to 20 words and bump up completion tokens
+                to 800.  Add 5 retries for each item to prevent early 
+                termination of the judge script.
+
+### Iteration 3: Fix Judging Run Time Errors, Add Retries, Tune Judge
+- **Date**: 2026-05-14
+- **Change**: Reduced judge summary to 20 words and bump up completion tokens
+                to 800.  Added 5 retries for each item to prevent early 
+                termination of the judge script. Set temperature to 0.3 from
+                0 to reduce judge strictness.
+
+                Ran analysis script to compare model judgments against human 
+                labels to tune the judge.
+
+- **Hypothesis**: Number of run time errors will be decreased, a less strict
+                judge should find some responses resolved. There are likely 
+                to be differences between human and model judgments on the 
+                human labels dataset, which will help identify areas for 
+                prompt improvement. 
+
+- **Result**: There were no uncorrected run time errors. Human vs LLM Judge 
+                Agreement was below 80% threshold on 2 items. Judge is 
+                stricter than human on all qualities with the widest gap on 
+                "Answer Completeness".
+                
+                Answer Completeness 55%
+                Overall Pass Rate 65%
+
+- **Decision**: The judge does not meet the 80% agreement threshold with 
+                human labels for Answer Completeness.
+
+- **Next step**: Fix the judge prompt for Answer Completeness.
+
+### Iteration 4: Initial Dataset Creation, Validation, Judging
+- **Date**: 2026-05-14
+- **Change**: Reduced judge summary to 20 words and bump up completion tokens
+                to 800.  Added 5 retries for each item to prevent early 
+                termination of the judge script. Set temperature to 0.3 from
+                0 to reduce judge strictness.
+
+                Ran analysis script to compare model judgments against human 
+                labels to tune the judge.
+
+- **Hypothesis**: Number of run time errors will be decreased, a less strict
+                judge should find some responses resolved. There are likely 
+                to be differences between human and model judgments on the 
+                human labels dataset, which will help identify areas for 
+                prompt improvement. 
+
+- **Result**: There were no uncorrected run time errors. Human vs LLM Judge 
+                Agreement was below 80% threshold on 2 items. Judge is 
+                stricter than human on all qualities with the widest gap on 
+                "Answer Completeness".
+                
+                Answer Completeness 55%
+                Overall Pass Rate 65%
+
+- **Decision**: The judge does not meet the 80% agreement threshold with 
+                human labels for Answer Completeness.
+
+- **Next step**: Fix the judge prompt for Answer Completeness.

@@ -1,0 +1,6 @@
+log_backup/
+__pycache__/
+.pytest_cache/
+/data/
+viz_test/
+.env
