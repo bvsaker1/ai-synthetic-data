@@ -3,14 +3,15 @@
 - **Change**: Created initial dataset using the llama-3.3-70b-versatile model
                  with various home maintenance tasks in raw_diy_dataset_1.jsonl.
                  Ran data validation to deduplicate and clean the dataset.
-                 Saved resulting dataset in diy_dataset_1.jsonl with 50 unique entries. 
+                 Saved resulting dataset in diy_dataset_1.jsonl with 50 unique 
+                 entries. 
                                  
-                Manually created human_labels.jsonl with human evaluations script for a 
-                subset of the dataset to compare against model judgments.
+                Manually created human_labels.jsonl with human evaluations script 
+                for a subset of the dataset to compare against model judgments.
 
-                Ran judge_eval script on the human labels dataset which was a 20 item subset of
-                diy_dataset_1.jsonl. Initial prompts used openai/gpt-oss-120b to 
-                 establish baseline performance metrics.                  
+                Ran judge_eval script on the human labels dataset which was a 20 
+                item subset of diy_dataset_1.jsonl. Judge model used 
+                openai/gpt-oss-120b to establish baseline performance metrics.                  
     
 - **Hypothesis**: There are likely to be differences between human and model 
                     judgments on the initial dataset, which will help identify 
@@ -71,31 +72,206 @@
 
 - **Next step**: Fix the judge prompt for Answer Completeness.
 
-### Iteration 4: Initial Dataset Creation, Validation, Judging
-- **Date**: 2026-05-14
-- **Change**: Reduced judge summary to 20 words and bump up completion tokens
-                to 800.  Added 5 retries for each item to prevent early 
-                termination of the judge script. Set temperature to 0.3 from
-                0 to reduce judge strictness.
+### Iteration 4: Fix Human vs. LLM Judge Agreement on Answer Completeness
+- **Date**: 2026-05-19
+- **Change**: Found human label for q00003 for Answer Completeness was 
+                incorrect and updated it accordingly.
 
-                Ran analysis script to compare model judgments against human 
-                labels to tune the judge.
+                Added the following general rules to the judge prompt to 
+                    clarify how the judge should evaluate the responses:
+                - Do not assume a repair is simple like assuming that a
+                    drywall hole is small and can be fixed with drywall 
+                    compound.
+                - Answer does not need to mention common tools listed in the 
+                    tools section if the tool is implied to be used such as 
+                    painting implies a paintbrush and a screwdriver or wrench 
+                    implies disassembling something for repair.
+                - Tips don’t need to be listed in the answer section if 
+                    existing in the tips list.
+                - Steps in the answer need to be in the list of steps.
+                - Do not list tools that are part of the system like hvac 
+                    listing thermostat.
+                - Do not make steps too vague like run wires to the electrical 
+                    box and install the GFCI. 
+                - If too complex then change the scope to out of scope and 
+                    requires an expert for that category.
 
-- **Hypothesis**: Number of run time errors will be decreased, a less strict
-                judge should find some responses resolved. There are likely 
-                to be differences between human and model judgments on the 
-                human labels dataset, which will help identify areas for 
-                prompt improvement. 
+                Update .env iteration to 4 to reflect the new iteration for 
+                    tracking purposes.
 
-- **Result**: There were no uncorrected run time errors. Human vs LLM Judge 
-                Agreement was below 80% threshold on 2 items. Judge is 
-                stricter than human on all qualities with the widest gap on 
-                "Answer Completeness".
-                
-                Answer Completeness 55%
-                Overall Pass Rate 65%
+                Ran judge_eval script again on the human labels dataset to see 
+                    if the judge agreement on Answer Completeness improved with 
+                    the updated human label and the clarified general rules for 
+                    judging.
 
-- **Decision**: The judge does not meet the 80% agreement threshold with 
-                human labels for Answer Completeness.
+                python3 judge_eval.py --dataset human_labels_dataset.jsonl 
+                    --iteration 4
 
-- **Next step**: Fix the judge prompt for Answer Completeness.
+- **Hypothesis**: The human and LLM judge agreement on Answer Completeness will 
+                improve with the updated human label and the clarified general 
+                rules for judging.
+
+- **Result**: The human and LLM judge agreement on Answer Completeness improved 
+                to 80% and within specifications.  However, Tip Usefulness 
+                agreement degraded to 75% which is below the 80% threshold. 
+
+                Answer Completeness 80%
+                Tip Usefulness 75%
+
+- **Decision**: Tip Usefulness agreement is below the 80% threshold so continue
+                fine tuning the prompt.
+
+- **Next step**: Update judge prompt to clarify Tip Usefulness quality and run 
+                judge_eval again to see if agreement improves.
+
+### Iteration 5: Fix Human vs. LLM Judge Agreement on Tip Usefulness
+- **Date**: 2026-05-19
+- **Change**: 
+                Added the following general rules to the judge prompt to 
+                    clarify how the judge should evaluate Tip Usefulness and 
+                    other qualities:
+                - Do not use irrelevant or incorrect tips like using a level
+                    to make sure that the paint is even or use a level to
+                    make sure that weather stripping is applied evenly. 
+                    compound.
+                - Do not use unhelpful tips such as checking a switch or other
+                    element, periodically, to make sure something is working.
+                    If it is not working properly, the homeowner would know
+                    immediately since it would stop working.
+
+                Update .env iteration to 5 to reflect the new iteration for 
+                    tracking purposes.
+
+                Ran judge_eval script again on the human labels dataset to see 
+                    if the judge agreement on Tip  improved with 
+                    the updated human label and the clarified general rules for 
+                    judging.
+
+                python3 judge_eval.py --dataset human_labels_dataset.jsonl 
+                    --iteration 5
+
+- **Hypothesis**: The human and LLM judge agreement on Tip Usefulness will 
+                improve with the updated human label and the clarified general 
+                rules for judging.
+
+- **Result**: The tip usefulness rose from 75% to 85% but answer completeness 
+                dropped from 80% down to 45% agreement where 10 out of 11 
+                disagreement were with judge failing the qualification for
+                answer completeness.
+
+- **Decision**: Iteration 4 was better overall than iteration 5 so try one more
+                iteration to fix this.
+
+- **Next step**: Update the judge prompt to not require the actual answer to
+                contain actual tools, tips etc.  As long as a section includes
+                them, it is ok.
+
+### Iteration 6: Fix Human vs. LLM Judge Agreement on Answer Completeness
+- **Date**: 2026-05-29
+- **Change**: 
+                Updating the following general rules to the judge prompt to 
+                    not require tips and tools to be included in the answer:
+                    Q1 Answer Completeness:
+                        - Answer includes or implies practical tools listed 
+                            in tools section. 
+                        - Answer includes concrete steps and safety.
+
+                Update .env iteration to 6 to reflect the new iteration for 
+                    tracking purposes.
+
+                Ran judge_eval script again on the human labels dataset to see 
+                    if the judge agreement on Answer Completeness improved with 
+                    the clarified general rules for judging.
+
+                python3 judge_eval.py --dataset human_labels_dataset.jsonl 
+                    --iteration 6
+
+                Ran analysis again on the result.
+
+                python3 analysis.py 
+
+- **Hypothesis**: The human and LLM judge agreement on Answer Completeness will
+                improve with the clarified general rules for judging.
+
+- **Result**: The answer completeness judge agreement dropped from 75% to 65%.
+
+- **Decision**: Iteration 6 was worse than iteration 5 so try one more
+                iteration to bring Answer Completeness up higher.
+
+- **Next step**: Update the judge prompt to fail vagueness in answers with a 
+                couple of examples. 
+
+### Iteration 7: Fix Human vs. LLM Judge Agreement on Answer Completeness
+- **Date**: 2026-05-29
+- **Change**: 
+                Updating the following general rules to the judge prompt to 
+                    be more strict on answer vagueness:
+
+                Q1 Answer Completeness
+                    - Do not make steps too vague like check the switch or run 
+                    wires to the electrical box or install the GFCI. These need 
+                    more steps or detail.", 
+                    - Do not make assumptions like a drywall hole being small 
+                    enough to use just compound.",
+
+                Update .env iteration to 7 to reflect the new iteration for 
+                    tracking purposes.
+
+                Ran judge_eval script again on the human labels dataset to see 
+                    if the judge agreement on Answer Completeness improved with 
+                    the clarified general rules for judging.
+
+                python3 judge_eval.py --dataset human_labels_dataset.jsonl 
+                    --iteration 7
+
+                Ran analysis again on the result.
+
+                python3 analysis.py 
+
+- **Hypothesis**: The human and LLM judge agreement on Answer Completeness will
+                improve with the clarified general rules for judging.
+
+- **Result**: The answer completeness judge agreement dropped from 75% to 65%.
+
+- **Decision**: Iteration 7 was worse than iteration 6. It has been decided that
+                75% agreement is good enough we will revert to iteration 6 judge
+                prompts and call it good. Now evaluate the judge eval on the 
+                human labels dataset in order to tune the dataset generation
+                prompt.
+
+- **Next step**: Evaluate the analysis on the human labels dataset and tune the
+                dataset generation prompt for the worst category. According to 
+                the heatmap of failed_quality_heatmap_iter_6.png, appliance
+                tip usefulness had a 75% failure rate so I will tune this 
+                prompt.
+
+                Update .env iteration to 7 to reflect the new iteration for 
+                    tracking purposes.
+
+                Run dataset_generation on the corrected prompt for iteration = 8
+
+                python3 dataset_generation.py --iteration 8 
+
+                Ran data evaluation on the result.
+
+                python3 data_validation.py
+
+                Run the judge evaluation on the new dataset.
+
+                python3 judge_eval.py 
+
+### Iteration 8: Fix UNRESOLVED rate for category appliance for Tip Usefulness
+- **Date**: 2026-05-29
+- **Change**: 
+                Updating the the appliance category template prompt and target tip
+                usefulness.
+
+- **Hypothesis**: The category appliance tip usefulness failure will fall toward
+                the 20% failure rate
+                will lower significantly. The goal is down to 20%.
+
+- **Result**: TBD
+
+- **Decision**: TBD
+
+- **Next step**: TBD

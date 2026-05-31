@@ -26,6 +26,44 @@ MAX_LLM_CALLS_PER_ATTEMPT = 5
 TEMPLATE_CHOICES = ["appliance", "electrical", "plumbing", "hvac", "general_home"]
 
 
+def build_iteration_prompt_log_path(iteration: str) -> str:
+    return f"logs/dataset_prompt_{iteration}.log"
+
+
+def _get_prompt_content(messages: List[Dict[str, str]], role: str) -> str:
+    for message in messages:
+        if message.get("role") == role:
+            return str(message.get("content", "")).strip()
+    return ""
+
+
+def format_prompt_block(category: str, messages: List[Dict[str, str]]) -> str:
+    system_prompt = _get_prompt_content(messages, "system")
+    user_prompt = _get_prompt_content(messages, "user")
+    divider = "=" * 100
+    return (
+        f"{divider}\n"
+        f"CATEGORY: {category}\n"
+        f"{divider}\n"
+        "SYSTEM PROMPT:\n"
+        f"{system_prompt}\n\n"
+        "USER PROMPT:\n"
+        f"{user_prompt}\n"
+    )
+
+
+def write_template_prompts(
+    prompt_log_path: str,
+    category: str,
+    messages: List[Dict[str, str]],
+) -> None:
+    block = format_prompt_block(category, messages)
+    with open(prompt_log_path, "a", encoding="utf-8") as prompt_log:
+        prompt_log.write(block)
+        prompt_log.write("\n")
+    print(block)
+
+
 class RepairQAModel(BaseModel):
     # generation stage validates the core content; id/category are assigned later.
     question: str = Field(..., min_length=1)
@@ -170,6 +208,9 @@ def main() -> None:
     iteration = os.getenv("ITERATION", "1")
     log_path = build_iteration_log_path(extension=".jsonl")
     logger = JsonEventLogger(log_path=log_path, script_name="dataset_generation", model=args.model, iteration=iteration)
+    prompt_log_path = build_iteration_prompt_log_path(iteration)
+    Path(prompt_log_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(prompt_log_path).write_text("", encoding="utf-8")
 
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
@@ -201,9 +242,29 @@ def main() -> None:
             {"selected_templates": sorted(selected)},
         )
 
+    logger.print_and_log(
+        f"Writing template prompts to {prompt_log_path}",
+        {"prompt_log_path": prompt_log_path},
+    )
+
     next_id = 1
     total_saved = 0
     for short_category, template_category_name, template_builder in templates:
+        template_messages = template_builder(count=args.count)
+        write_template_prompts(
+            prompt_log_path=prompt_log_path,
+            category=short_category,
+            messages=template_messages,
+        )
+        logger.print_and_log(
+            f"Logged prompts for {template_category_name} to {prompt_log_path}",
+            {
+                "category": short_category,
+                "template": template_category_name,
+                "prompt_log_path": prompt_log_path,
+            },
+        )
+
         logger.print_and_log(
             f"Generating {args.count} items from {template_category_name}...",
             {"category": short_category, "template": template_category_name},

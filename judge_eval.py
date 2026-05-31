@@ -74,7 +74,11 @@ def load_judge_prompt_template(prompt_path: str) -> Dict[str, str]:
         raise ValueError(f"Prompt template must be a JSON object, not {type(template).__name__}.")
 
     system_prompt = str(template.get("system_prompt", "")).strip()
-    user_prompt_template = str(template.get("user_prompt_template", "")).strip()
+    raw_template = template.get("user_prompt_template", "")
+    if isinstance(raw_template, list):
+        user_prompt_template = "\n".join(raw_template).strip()
+    else:
+        user_prompt_template = str(raw_template).strip()
 
     if not system_prompt:
         raise ValueError("Prompt template missing non-empty 'system_prompt'.")
