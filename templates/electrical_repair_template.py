@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from base_template import build_common_user_prompt, build_system_prompt
+from templates.base_template import build_common_user_prompt, build_system_prompt
 
 
 ELECTRICAL_CATEGORY = "electrical_repair"
@@ -11,7 +11,13 @@ ELECTRICAL_SPECIFIC_PROMPT_INFO = (
 	"- Your guidance should be safe, practical, and accessible for a homeowner with basic DIY skills.\n"
 	"Always prioritize safety and include clear escalation points to licensed electricians when repairs involve high-voltage, complex wiring, or potential code violations.\n"
 	"- Example topics: non-working outlets, tripped breakers, switch replacement, GFCI resets.\n"
-	"- Include strict safety escalation for panel work, unknown wiring, aluminum wiring, or signs of overheating/arcing."
+	"- Include strict safety escalation for panel work, unknown wiring, aluminum wiring, damaged wires, or signs of overheating/arcing; do not frame wire replacement as a DIY step.\n"
+	"- Tips must be NON-OBVIOUS electrical insights, NOT safety reminders. Examples of GOOD tips:\n"
+	"  * For a dead outlet: 'Before replacing the outlet, check if a nearby GFCI outlet is tripped—it may control this outlet from elsewhere'\n"
+	"  * For flickering lights: 'Intermittent flickering often means a loose connection at the breaker, not the light fixture itself'\n"
+	"  * For tripped breaker: 'If it trips immediately, there's a short circuit; if it trips after running, the circuit is overloaded'\n"
+	"  * For a dimmer switch: 'Not all LED bulbs work with dimmers—look for \"dimmable\" rating to avoid strobing or failure'\n"
+	"- AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps."
 )
 
 

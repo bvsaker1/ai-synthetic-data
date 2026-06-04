@@ -8,17 +8,19 @@ import instructor
 from groq import Groq
 from pydantic import BaseModel, ConfigDict, Field
 
-from appliance_repair_template import build_appliance_repair_messages
-from electrical_repair_template import build_electrical_repair_messages
-from gen_home_repair_template import build_general_home_repair_messages
-from hvac_maintenance_template import build_hvac_maintenance_messages
-from logging_utils import (
+from src.logging_utils import (
     JsonEventLogger,
     build_iteration_dataset_path,
     build_iteration_log_path,
     load_env_file,
+    PROJECT_ROOT,
+    utc_now_iso,
 )
-from plumbing_repair_template import build_plumbing_repair_messages
+from templates.appliance_repair_template import build_appliance_repair_messages
+from templates.electrical_repair_template import build_electrical_repair_messages
+from templates.gen_home_repair_template import build_general_home_repair_messages
+from templates.hvac_maintenance_template import build_hvac_maintenance_messages
+from templates.plumbing_repair_template import build_plumbing_repair_messages
 
 
 DEFAULT_GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
@@ -27,7 +29,7 @@ TEMPLATE_CHOICES = ["appliance", "electrical", "plumbing", "hvac", "general_home
 
 
 def build_iteration_prompt_log_path(iteration: str) -> str:
-    return f"logs/dataset_prompt_{iteration}.log"
+    return str(PROJECT_ROOT / "logs" / f"dataset_prompt_{iteration}.log")
 
 
 def _get_prompt_content(messages: List[Dict[str, str]], role: str) -> str:
@@ -37,13 +39,62 @@ def _get_prompt_content(messages: List[Dict[str, str]], role: str) -> str:
     return ""
 
 
-def format_prompt_block(category: str, messages: List[Dict[str, str]]) -> str:
+def format_prompt_run_header(
+    iteration: str,
+    model: str,
+    count: int,
+    selected_templates: List[str],
+    template_names: List[str],
+) -> str:
+    divider = "#" * 100
+    selected_text = ", ".join(selected_templates) if selected_templates else "all"
+    template_name_text = ", ".join(template_names)
+    return (
+        f"{divider}\n"
+        "DATASET PROMPT RUN HEADER\n"
+        f"timestamp_utc: {utc_now_iso()}\n"
+        f"iteration: {iteration}\n"
+        f"model: {model}\n"
+        f"count_per_template: {count}\n"
+        f"selected_templates: {selected_text}\n"
+        f"active_template_names: {template_name_text}\n"
+        f"{divider}\n\n"
+    )
+
+
+def write_prompt_run_header(
+    prompt_log_path: str,
+    iteration: str,
+    model: str,
+    count: int,
+    selected_templates: List[str],
+    template_names: List[str],
+) -> None:
+    header = format_prompt_run_header(
+        iteration=iteration,
+        model=model,
+        count=count,
+        selected_templates=selected_templates,
+        template_names=template_names,
+    )
+    with open(prompt_log_path, "a", encoding="utf-8") as prompt_log:
+        prompt_log.write(header)
+    print(header)
+
+
+def format_prompt_block(
+    category: str,
+    template_name: str,
+    messages: List[Dict[str, str]],
+) -> str:
     system_prompt = _get_prompt_content(messages, "system")
     user_prompt = _get_prompt_content(messages, "user")
     divider = "=" * 100
     return (
         f"{divider}\n"
-        f"CATEGORY: {category}\n"
+        "PROMPT METADATA\n"
+        f"category: {category}\n"
+        f"template_name: {template_name}\n"
         f"{divider}\n"
         "SYSTEM PROMPT:\n"
         f"{system_prompt}\n\n"
@@ -55,9 +106,14 @@ def format_prompt_block(category: str, messages: List[Dict[str, str]]) -> str:
 def write_template_prompts(
     prompt_log_path: str,
     category: str,
+    template_name: str,
     messages: List[Dict[str, str]],
 ) -> None:
-    block = format_prompt_block(category, messages)
+    block = format_prompt_block(
+        category=category,
+        template_name=template_name,
+        messages=messages,
+    )
     with open(prompt_log_path, "a", encoding="utf-8") as prompt_log:
         prompt_log.write(block)
         prompt_log.write("\n")
@@ -234,9 +290,11 @@ def main() -> None:
         ("general_home", "general_home_repair", build_general_home_repair_messages),
     ]
 
+    selected_templates = TEMPLATE_CHOICES
     if args.template:
         selected = set(args.template)
         templates = [tpl for tpl in templates if tpl[0] in selected]
+        selected_templates = sorted(selected)
         logger.print_and_log(
             f"Template filter active: {sorted(selected)}",
             {"selected_templates": sorted(selected)},
@@ -246,6 +304,14 @@ def main() -> None:
         f"Writing template prompts to {prompt_log_path}",
         {"prompt_log_path": prompt_log_path},
     )
+    write_prompt_run_header(
+        prompt_log_path=prompt_log_path,
+        iteration=iteration,
+        model=args.model,
+        count=args.count,
+        selected_templates=selected_templates,
+        template_names=[template_name for _, template_name, _ in templates],
+    )
 
     next_id = 1
     total_saved = 0
@@ -254,6 +320,7 @@ def main() -> None:
         write_template_prompts(
             prompt_log_path=prompt_log_path,
             category=short_category,
+            template_name=template_category_name,
             messages=template_messages,
         )
         logger.print_and_log(

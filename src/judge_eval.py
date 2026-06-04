@@ -5,11 +5,13 @@ import random
 import re
 import time
 from collections import deque
+from pathlib import Path
 from typing import Any, Deque, Dict, List, Tuple
 
 from groq import Groq
-from logging_utils import (
+from src.logging_utils import (
     JsonEventLogger,
+    PROJECT_ROOT,
     get_iteration,
     load_env_file,
 )
@@ -43,16 +45,41 @@ from logging_utils import (
 # DEFAULT_JUDGE_MODEL = os.getenv("JUDGE_MODEL", "openai/gpt-oss-20b")
 DEFAULT_JUDGE_MODEL = os.getenv("JUDGE_MODEL", "openai/gpt-oss-120b")
 DEFAULT_MAX_TPM = int(os.getenv("JUDGE_MAX_TPM", "8000"))
-DEFAULT_MAX_COMPLETION_TOKENS = int(os.getenv("JUDGE_MAX_COMPLETION_TOKENS", "800"))
+DEFAULT_MAX_COMPLETION_TOKENS = 800
 DEFAULT_MAX_RETRIES = int(os.getenv("JUDGE_MAX_RETRIES", "5"))
 DEFAULT_TPM_WINDOW_SECONDS = 60.0
 MAX_ITEM_TEXT_CHARS = int(os.getenv("JUDGE_MAX_ITEM_TEXT_CHARS", "1400"))
 MAX_ITEM_LIST_LENGTH = int(os.getenv("JUDGE_MAX_ITEM_LIST_LENGTH", "8"))
 MAX_ITEM_LIST_ENTRY_CHARS = int(os.getenv("JUDGE_MAX_ITEM_LIST_ENTRY_CHARS", "180"))
+CATEGORIES = ["appliance", "electrical", "plumbing", "general_home", "hvac"]
 
 
-def build_iteration_path(prefix: str, iteration: str, extension: str = ".jsonl") -> str:
-    return f"{prefix}_{iteration}{extension}"
+def resolve_max_completion_tokens_default() -> int:
+    """Resolve max completion tokens from env after .env has been loaded.
+
+    Preference order:
+    1) JUDGE_MAX_COMPLETION_TOKENS
+    2) hardcoded fallback
+    """
+    env_var = "JUDGE_MAX_COMPLETION_TOKENS"
+    raw_value = os.getenv(env_var)
+    if raw_value is None or not raw_value.strip():
+        return DEFAULT_MAX_COMPLETION_TOKENS
+
+    try:
+        value = int(raw_value)
+    except ValueError as error:
+        raise ValueError(f"{env_var} must be an integer, got: {raw_value!r}") from error
+    if value <= 0:
+        raise ValueError(f"{env_var} must be greater than 0, got: {value}")
+    return value
+
+
+def build_iteration_path(prefix: str, iteration: str, extension: str = ".jsonl", subdir: str | None = None) -> str:
+    filename = f"{prefix}_{iteration}{extension}"
+    if subdir:
+        return str(PROJECT_ROOT / subdir / filename)
+    return str(PROJECT_ROOT / filename)
 
 
 def load_judge_prompt_template(prompt_path: str) -> Dict[str, str]:
@@ -95,6 +122,7 @@ def load_judge_prompt_template(prompt_path: str) -> Dict[str, str]:
 
 def parse_args() -> argparse.Namespace:
     load_env_file()
+    max_completion_tokens_default = resolve_max_completion_tokens_default()
     parser = argparse.ArgumentParser(description="LLM judge for home-repair QA datasets.")
     parser.add_argument(
         "--iteration",
@@ -106,19 +134,19 @@ def parse_args() -> argparse.Namespace:
         "--dataset",
         type=str,
         default=None,
-        help="Input dataset path (.json or .jsonl). Defaults to diy_dataset_<iteration>.jsonl.",
+        help="Input dataset path (.json or .jsonl). Defaults to project_root/data/diy_dataset_<iteration>.jsonl.",
     )
     parser.add_argument(
         "--output",
         type=str,
         default=None,
-        help="Output labels JSONL path. Defaults to judge_labels_<iteration>.jsonl.",
+        help="Output labels JSONL path. Defaults to project_root/labels/judge_labels_<iteration>.jsonl.",
     )
     parser.add_argument(
         "--prompt-template",
         type=str,
         default=None,
-        help="Judge prompt template JSON path. Defaults to judge_prompt_<iteration>.json.",
+        help="Judge prompt template JSON path. Defaults to project_root/templates/judge_prompt_<iteration>.json.",
     )
     parser.add_argument(
         "--model",
@@ -138,10 +166,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-completion-tokens",
         type=int,
-        default=DEFAULT_MAX_COMPLETION_TOKENS,
+        default=max_completion_tokens_default,
         help=(
             "Max completion tokens per judge response to keep per-request token "
-            f"usage bounded. Default: {DEFAULT_MAX_COMPLETION_TOKENS}"
+            "usage bounded. Reads from JUDGE_MAX_COMPLETION_TOKENS in .env when set. "
+            f"Default: {max_completion_tokens_default}"
         ),
     )
     parser.add_argument(
@@ -165,9 +194,9 @@ def parse_args() -> argparse.Namespace:
         help="Randomly sample items instead of evaluating sequentially from the top of the dataset.",
     )
     args = parser.parse_args()
-    args.dataset = args.dataset or build_iteration_path("diy_dataset", args.iteration)
-    args.output = args.output or build_iteration_path("judge_labels", args.iteration)
-    args.prompt_template = args.prompt_template or build_iteration_path("judge_prompt", args.iteration, extension=".json")
+    args.dataset = args.dataset or build_iteration_path("diy_dataset", args.iteration, subdir="data")
+    args.output = args.output or build_iteration_path("judge_labels", args.iteration, subdir="labels")
+    args.prompt_template = args.prompt_template or build_iteration_path("judge_prompt", args.iteration, extension=".json", subdir="templates")
     return args
 
 
@@ -380,7 +409,68 @@ def select_items(
 
     if random_mode:
         sample_size = 1 if items_to_test is None else min(items_to_test, len(items))
-        return random.sample(items, k=sample_size)
+        pools: Dict[str, List[Dict[str, Any]]] = {
+            category: [
+                item
+                for item in items
+                if str(item.get("category", "")).strip() == category
+            ]
+            for category in CATEGORIES
+        }
+
+        missing_categories = [category for category, pool in pools.items() if not pool]
+        if missing_categories:
+            counts_text = ", ".join(
+                f"{category}={len(pools[category])}" for category in CATEGORIES
+            )
+            missing_text = ", ".join(missing_categories)
+            raise ValueError(
+                "Cannot perform balanced random sampling because required categories are missing: "
+                f"{missing_text}. Counts: {counts_text}."
+            )
+
+        selected: List[Dict[str, Any]] = []
+
+        # If the sample is smaller than category count, choose distinct categories so
+        # no category is over-represented.
+        if sample_size < len(CATEGORIES):
+            chosen_categories = random.sample(CATEGORIES, k=sample_size)
+            for category in chosen_categories:
+                selected.extend(random.sample(pools[category], k=1))
+            random.shuffle(selected)
+            return selected
+
+        base, remainder = divmod(sample_size, len(CATEGORIES))
+        target_per_category = {category: base for category in CATEGORIES}
+        for category in random.sample(CATEGORIES, k=remainder):
+            target_per_category[category] += 1
+
+        insufficient = [
+            category
+            for category in CATEGORIES
+            if len(pools[category]) < target_per_category[category]
+        ]
+        if insufficient:
+            counts_text = ", ".join(
+                f"{category}={len(pools[category])}" for category in CATEGORIES
+            )
+            requested_text = ", ".join(
+                f"{category}={target_per_category[category]}" for category in CATEGORIES
+            )
+            insufficient_text = ", ".join(insufficient)
+            raise ValueError(
+                "Insufficient rows for balanced random sampling. "
+                f"Categories lacking capacity: {insufficient_text}. "
+                f"Available counts: {counts_text}. Requested counts: {requested_text}."
+            )
+
+        for category in CATEGORIES:
+            target = target_per_category[category]
+            if target > 0:
+                selected.extend(random.sample(pools[category], k=target))
+
+        random.shuffle(selected)
+        return selected
 
     if items_to_test is None:
         return items
@@ -570,8 +660,10 @@ def run_judge(
     client = Groq(api_key=api_key)
     limiter = TokenRateLimiter(max_tokens_per_window=max_tpm)
     runtime_error_count = 0
-    log_path = build_iteration_path("logs/dataset_log", iteration)
+    log_path = build_iteration_path("dataset_log", iteration, subdir="logs")
     logger = JsonEventLogger(log_path=log_path, script_name="judge_eval", model=model, iteration=iteration)
+
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
     startup_message = (
         "Judge eval run started | "

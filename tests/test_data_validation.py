@@ -19,8 +19,8 @@ import numpy as np
 import pytest
 from pydantic import ValidationError
 
-import data_validation
-from data_validation import (
+import src.data_validation as data_validation
+from src.data_validation import (
     DEFAULT_DEDUP_THRESHOLD,
     EMBEDDING_MODEL,
     RepairQAModel,
@@ -29,7 +29,7 @@ from data_validation import (
     deduplicate_dataset,
     parse_args,
 )
-from logging_utils import JsonEventLogger
+from src.logging_utils import JsonEventLogger
 
 
 # Sample valid QA item
@@ -191,7 +191,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer") as mock_transformer:
+            with patch("src.data_validation.SentenceTransformer") as mock_transformer:
                 mock_instance = MagicMock()
                 mock_transformer.return_value = mock_instance
                 
@@ -238,7 +238,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer") as mock_transformer:
+            with patch("src.data_validation.SentenceTransformer") as mock_transformer:
                 mock_instance = MagicMock()
                 mock_transformer.return_value = mock_instance
                 
@@ -276,7 +276,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer"):
+            with patch("src.data_validation.SentenceTransformer"):
                 unique, duplicates, invalid = deduplicate_dataset(
                     input_path=str(input_path),
                     valid_output_path=str(valid_path),
@@ -312,7 +312,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer"):
+            with patch("src.data_validation.SentenceTransformer"):
                 unique, duplicates, invalid = deduplicate_dataset(
                     input_path=str(input_path),
                     valid_output_path=str(valid_path),
@@ -341,7 +341,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer") as mock_transformer:
+            with patch("src.data_validation.SentenceTransformer") as mock_transformer:
                 mock_instance = MagicMock()
                 mock_transformer.return_value = mock_instance
                 
@@ -382,7 +382,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer") as mock_transformer:
+            with patch("src.data_validation.SentenceTransformer") as mock_transformer:
                 mock_instance = MagicMock()
                 mock_transformer.return_value = mock_instance
                 
@@ -419,7 +419,7 @@ class TestDeduplicateDataset:
             
             logger = JsonEventLogger(log_path=str(log_path), script_name="test", model="test")
             
-            with patch("data_validation.SentenceTransformer") as mock_transformer:
+            with patch("src.data_validation.SentenceTransformer") as mock_transformer:
                 mock_instance = MagicMock()
                 mock_transformer.return_value = mock_instance
                 

@@ -1,0 +1,377 @@
+####################################################################################################
+DATASET PROMPT RUN HEADER
+timestamp_utc: 2026-06-02T01:50:24.518128+00:00
+iteration: 8
+model: llama-3.3-70b-versatile
+count_per_template: 10
+selected_templates: appliance, electrical, plumbing, hvac, general_home
+active_template_names: appliance_repair, electrical_repair, plumbing_repair, hvac_maintenance, general_home_repair
+####################################################################################################
+
+====================================================================================================
+PROMPT METADATA
+category: appliance
+template_name: appliance_repair
+====================================================================================================
+SYSTEM PROMPT:
+You generate high-quality DIY dataset items for appliance_repair in strict JSON. Output must be valid JSON only with keys: question, answer, equipment_problem, tools_required, steps, safety_info, tips.
+
+USER PROMPT:
+Create 10 unique appliance_repair QA items.
+
+Validation rules to satisfy in the output schema:
+1) question and answer are non-empty strings
+2) steps contains at least 3 items
+3) tools_required contains at least 1 item
+4) tips contains at least 1 item
+5) safety_info is present and non-empty
+
+LLM-evaluated failure modes that should be proactively avoided in generation:
+Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+Q3 Tool Realism: tools should be typical homeowner tools available in general hardware stores, typically under $50 each.
+Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+Q8 Category Accuracy: content must match appliance_repair.
+
+Key principles for dataset creation:
+- Provide a substantial narrative answer, typically around 700-1300 characters.
+- Safety guidance must be task-specific and hazard-specific.
+- Tips should include practical, non-obvious insights a beginner might not know.
+- Steps should include observable outcomes, quantities, or thresholds when relevant.
+
+CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+AVOID these common tip mistakes:
+- DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+- DO NOT suggest obvious troubleshooting steps that are already in the main steps
+- DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+- DO NOT suggest redundant information from the answer section
+GOOD tip examples (what to aim for):
+- For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+- For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+- For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+- For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+
+Output JSON schema:
+{
+  "question": "...",
+  "answer": "...",
+  "equipment_problem": "...",
+  "tools_required": ["..."],
+  "steps": ["...", "...", "..."],
+  "safety_info": "...",
+  "tips": ["..."]
+}
+
+Return JSON only. No markdown.
+
+Appliance-specific guidance to append to generic instructions:
+- Focus on common household appliances such as refrigerator, dishwasher, washer, dryer, microwave, and oven.
+- Insure to include a balanced mix of appliances so that one appliance type doesn't dominate the examples (e.g. don't just do 10 dryer issues).
+- Include model-agnostic troubleshooting steps before replacement (power check, filters, drain path, lint, door seals, leveling).
+- Prefer homeowner-safe actions first; clearly escalate when high-voltage, refrigerant, gas, or sealed-system work is involved.
+- Include observable diagnostics in steps (error codes, sounds, vibration, heat level, standing water, cycle completion).
+- Tips must be NON-OBVIOUS appliance insights, NOT maintenance reminders. Examples of GOOD tips:
+  * For a leaking washer: 'Slow leaks often come from the door seal, not the hoses—check for visible wear or debris first'
+  * For a dryer not heating: 'If the drum turns but heat is off, the thermal fuse is likely blown—it's cheaper than calling a tech'
+  * For a dishwasher not cleaning: 'Hard water mineral buildup blocks spray arms more than dirty filters—run vinegar cycles monthly'
+  * For an oven not heating evenly: 'If one side heats more than the other, the heating element may be failing, not miscalibration'
+- AVOID: Generic checks, maintenance reminders, or redundant troubleshooting already in steps.
+
+====================================================================================================
+PROMPT METADATA
+category: electrical
+template_name: electrical_repair
+====================================================================================================
+SYSTEM PROMPT:
+You generate high-quality DIY dataset items for electrical_repair in strict JSON. Output must be valid JSON only with keys: question, answer, equipment_problem, tools_required, steps, safety_info, tips.
+
+USER PROMPT:
+Create 10 unique electrical_repair QA items.
+
+Validation rules to satisfy in the output schema:
+1) question and answer are non-empty strings
+2) steps contains at least 3 items
+3) tools_required contains at least 1 item
+4) tips contains at least 1 item
+5) safety_info is present and non-empty
+
+LLM-evaluated failure modes that should be proactively avoided in generation:
+Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+Q3 Tool Realism: tools should be typical homeowner tools available in general hardware stores, typically under $50 each.
+Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+Q8 Category Accuracy: content must match electrical_repair.
+
+Key principles for dataset creation:
+- Provide a substantial narrative answer, typically around 700-1300 characters.
+- Safety guidance must be task-specific and hazard-specific.
+- Tips should include practical, non-obvious insights a beginner might not know.
+- Steps should include observable outcomes, quantities, or thresholds when relevant.
+
+CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+AVOID these common tip mistakes:
+- DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+- DO NOT suggest obvious troubleshooting steps that are already in the main steps
+- DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+- DO NOT suggest redundant information from the answer section
+GOOD tip examples (what to aim for):
+- For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+- For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+- For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+- For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+
+Output JSON schema:
+{
+  "question": "...",
+  "answer": "...",
+  "equipment_problem": "...",
+  "tools_required": ["..."],
+  "steps": ["...", "...", "..."],
+  "safety_info": "...",
+  "tips": ["..."]
+}
+
+Return JSON only. No markdown.
+
+Electrical-specific guidance to append to generic instructions:
+- You are an expert home electrician providing detailed, step-by-step repair instructions for common household electrical issues.
+- Your guidance should be safe, practical, and accessible for a homeowner with basic DIY skills.
+Always prioritize safety and include clear escalation points to licensed electricians when repairs involve high-voltage, complex wiring, or potential code violations.
+- Example topics: non-working outlets, tripped breakers, switch replacement, GFCI resets.
+- Include strict safety escalation for panel work, unknown wiring, aluminum wiring, or signs of overheating/arcing.
+- Tips must be NON-OBVIOUS electrical insights, NOT safety reminders. Examples of GOOD tips:
+  * For a dead outlet: 'Before replacing the outlet, check if a nearby GFCI outlet is tripped—it may control this outlet from elsewhere'
+  * For flickering lights: 'Intermittent flickering often means a loose connection at the breaker, not the light fixture itself'
+  * For tripped breaker: 'If it trips immediately, there's a short circuit; if it trips after running, the circuit is overloaded'
+  * For a dimmer switch: 'Not all LED bulbs work with dimmers—look for "dimmable" rating to avoid strobing or failure'
+- AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps.
+
+====================================================================================================
+PROMPT METADATA
+category: plumbing
+template_name: plumbing_repair
+====================================================================================================
+SYSTEM PROMPT:
+You generate high-quality DIY dataset items for plumbing_repair in strict JSON. Output must be valid JSON only with keys: question, answer, equipment_problem, tools_required, steps, safety_info, tips.
+
+USER PROMPT:
+Create 10 unique plumbing_repair QA items.
+
+Validation rules to satisfy in the output schema:
+1) question and answer are non-empty strings
+2) steps contains at least 3 items
+3) tools_required contains at least 1 item
+4) tips contains at least 1 item
+5) safety_info is present and non-empty
+
+LLM-evaluated failure modes that should be proactively avoided in generation:
+Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+Q3 Tool Realism: tools should be typical homeowner tools available in general hardware stores, typically under $50 each.
+Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+Q8 Category Accuracy: content must match plumbing_repair.
+
+Key principles for dataset creation:
+- Provide a substantial narrative answer, typically around 700-1300 characters.
+- Safety guidance must be task-specific and hazard-specific.
+- Tips should include practical, non-obvious insights a beginner might not know.
+- Steps should include observable outcomes, quantities, or thresholds when relevant.
+
+CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+AVOID these common tip mistakes:
+- DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+- DO NOT suggest obvious troubleshooting steps that are already in the main steps
+- DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+- DO NOT suggest redundant information from the answer section
+GOOD tip examples (what to aim for):
+- For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+- For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+- For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+- For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+
+Output JSON schema:
+{
+  "question": "...",
+  "answer": "...",
+  "equipment_problem": "...",
+  "tools_required": ["..."],
+  "steps": ["...", "...", "..."],
+  "safety_info": "...",
+  "tips": ["..."]
+}
+
+Return JSON only. No markdown.
+
+Plumbing-specific guidance to append to generic instructions:
+- Example topics: leaks, clogs, shutoff valves, traps, toilet fill/flush issues, fixture replacement, water heaters.
+- Include when to escalate to licensed plumber (main line, sewer, hidden leaks behind walls, code-required work).
+- Tips must be NON-OBVIOUS plumbing insights, NOT maintenance checklists. Examples of GOOD tips:
+  * For a slow drain: 'If plunging the sink doesn't work but the toilet flushes normally, the clog is in the vent stack, not the drain branch'
+  * For a leaking faucet: 'If tightening the packing nut doesn't stop dripping, the cartridge seal is worn—replacing the cartridge is cheaper than a new faucet'
+  * For a running toilet: 'Listen closely—if water hisses, the fill valve is leaking; if it gurgles, the flapper is stuck'
+  * For low water pressure: 'Check the shutoff valve first—it's often partially closed after work; sediment in aerators is second'
+- AVOID: Generic maintenance checks, obvious preventive actions, or redundant drain/leak troubleshooting.
+
+====================================================================================================
+PROMPT METADATA
+category: hvac
+template_name: hvac_maintenance
+====================================================================================================
+SYSTEM PROMPT:
+You generate high-quality DIY dataset items for hvac_maintenance in strict JSON. Output must be valid JSON only with keys: question, answer, equipment_problem, tools_required, steps, safety_info, tips.
+
+USER PROMPT:
+Create 10 unique hvac_maintenance QA items.
+
+Validation rules to satisfy in the output schema:
+1) question and answer are non-empty strings
+2) steps contains at least 3 items
+3) tools_required contains at least 1 item
+4) tips contains at least 1 item
+5) safety_info is present and non-empty
+
+LLM-evaluated failure modes that should be proactively avoided in generation:
+Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+Q3 Tool Realism: tools should be typical homeowner tools available in general hardware stores, typically under $50 each.
+Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+Q8 Category Accuracy: content must match hvac_maintenance.
+
+Key principles for dataset creation:
+- Provide a substantial narrative answer, typically around 700-1300 characters.
+- Safety guidance must be task-specific and hazard-specific.
+- Tips should include practical, non-obvious insights a beginner might not know.
+- Steps should include observable outcomes, quantities, or thresholds when relevant.
+
+CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+AVOID these common tip mistakes:
+- DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+- DO NOT suggest obvious troubleshooting steps that are already in the main steps
+- DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+- DO NOT suggest redundant information from the answer section
+GOOD tip examples (what to aim for):
+- For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+- For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+- For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+- For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+
+Output JSON schema:
+{
+  "question": "...",
+  "answer": "...",
+  "equipment_problem": "...",
+  "tools_required": ["..."],
+  "steps": ["...", "...", "..."],
+  "safety_info": "...",
+  "tips": ["..."]
+}
+
+Return JSON only. No markdown.
+
+HVAC-specific guidance to append to generic instructions:
+- Example topics: filter changes, thermostat checks, condensate drain cleaning, airflow balancing, furnace not running, ac not running.
+- Include when to escalate to certified technician (refrigerant handling, compressor faults, electrical control board issues).
+- Tips must be NON-OBVIOUS HVAC insights, NOT maintenance reminders. Examples of GOOD tips:
+  * For uneven heating/cooling: 'Closed supply vents in unused rooms can starve other areas—try balancing vents instead of adjusting thermostat'
+  * For a furnace not running: 'The pilot light or ignition sensor may just be dirty—cleaning it is faster and cheaper than service calls'
+  * For low AC cooling: 'A frozen evaporator coil (not low refrigerant) causes weak airflow—check the condensate drain for blockages first'
+  * For a noisy blower: 'Rattling usually means a loose access panel or duct, not a failing motor—tighten fasteners before calling for service'
+- AVOID: Generic filter reminders, obvious maintenance checklists, or redundant diagnostic steps.
+
+====================================================================================================
+PROMPT METADATA
+category: general_home
+template_name: general_home_repair
+====================================================================================================
+SYSTEM PROMPT:
+You generate high-quality DIY dataset items for general_home_repair in strict JSON. Output must be valid JSON only with keys: question, answer, equipment_problem, tools_required, steps, safety_info, tips.
+
+USER PROMPT:
+Create 10 unique general_home_repair QA items.
+
+Validation rules to satisfy in the output schema:
+1) question and answer are non-empty strings
+2) steps contains at least 3 items
+3) tools_required contains at least 1 item
+4) tips contains at least 1 item
+5) safety_info is present and non-empty
+
+LLM-evaluated failure modes that should be proactively avoided in generation:
+Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+Q3 Tool Realism: tools should be typical homeowner tools available in general hardware stores, typically under $50 each.
+Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+Q8 Category Accuracy: content must match general_home_repair.
+
+Key principles for dataset creation:
+- Provide a substantial narrative answer, typically around 700-1300 characters.
+- Safety guidance must be task-specific and hazard-specific.
+- Tips should include practical, non-obvious insights a beginner might not know.
+- Steps should include observable outcomes, quantities, or thresholds when relevant.
+
+CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+AVOID these common tip mistakes:
+- DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+- DO NOT suggest obvious troubleshooting steps that are already in the main steps
+- DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+- DO NOT suggest redundant information from the answer section
+GOOD tip examples (what to aim for):
+- For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+- For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+- For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+- For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+
+Output JSON schema:
+{
+  "question": "...",
+  "answer": "...",
+  "equipment_problem": "...",
+  "tools_required": ["..."],
+  "steps": ["...", "...", "..."],
+  "safety_info": "...",
+  "tips": ["..."]
+}
+
+Return JSON only. No markdown.
+
+General home-repair-specific guidance to append to generic instructions:
+- Example topics: minor drywall damage, trim fixes, caulking, squeaky hinges, weatherstripping, painting touch-ups, door adjustments.
+- Include escalation when repairs involve structural, electrical-panel, gas, or major plumbing risks.
+- Tips must be NON-OBVIOUS general home repair insights, NOT irrelevant tool advice. Examples of GOOD tips:
+  * For drywall patching: 'Small holes should use spackle, but large holes need mesh tape first—skipping tape causes future cracking'
+  * For painting: 'Primer isn't just for new walls—use it on stains and water marks to prevent bleed-through, not for evenness'
+  * For weatherstripping: 'Felt wears faster than rubber—use rubber or EPDM for doors; felt is fine for windows only'
+  * For squeaky hinges: 'If oil doesn't stop squeaking, the pin is bent—remove and straighten it on a hard surface'
+  * For caulking: 'Silicone caulk is waterproof but too rigid outdoors—use paintable acrylic for trim; silicone for bathrooms only'
+- AVOID: Irrelevant tool recommendations (e.g., level for painting/weatherstripping), obvious maintenance checks, or redundant repair steps.
+

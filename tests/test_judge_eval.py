@@ -18,8 +18,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import judge_eval
-from judge_eval import (
+import src.judge_eval as judge_eval
+from src.judge_eval import (
     DEFAULT_JUDGE_MODEL,
     DEFAULT_MAX_COMPLETION_TOKENS,
     DEFAULT_MAX_RETRIES,
@@ -318,18 +318,18 @@ class TestParseArgs:
         monkeypatch.setattr("sys.argv", ["judge_eval.py"])
         args = parse_args()
         assert args.iteration == judge_eval.get_iteration()
-        assert args.dataset == build_iteration_path("diy_dataset", args.iteration)
-        assert args.output == build_iteration_path("judge_labels", args.iteration)
-        assert args.prompt_template == build_iteration_path("judge_prompt", args.iteration, extension=".json")
+        assert args.dataset == build_iteration_path("diy_dataset", args.iteration, subdir="data")
+        assert args.output == build_iteration_path("judge_labels", args.iteration, subdir="labels")
+        assert args.prompt_template == build_iteration_path("judge_prompt", args.iteration, extension=".json", subdir="templates")
 
     def test_custom_iteration_updates_default_paths(self, monkeypatch):
         """Custom iteration should flow into default dataset/output/prompt paths"""
         monkeypatch.setattr("sys.argv", ["judge_eval.py", "--iteration", "7"])
         args = parse_args()
         assert args.iteration == "7"
-        assert args.dataset == "diy_dataset_7.jsonl"
-        assert args.output == "judge_labels_7.jsonl"
-        assert args.prompt_template == "judge_prompt_7.json"
+        assert args.dataset.endswith("diy_dataset_7.jsonl")
+        assert args.output.endswith("labels/judge_labels_7.jsonl")
+        assert args.prompt_template.endswith("judge_prompt_7.json")
 
     def test_read_json_file(self):
         """Read JSON array file"""
@@ -369,9 +369,43 @@ class TestSelectItems:
 
     def test_random_mode_no_limit_returns_one(self):
         """Random mode without limit returns 1"""
-        items = [{"id": "1"}, {"id": "2"}, {"id": "3"}]
+        items = [
+            {"id": "1", "category": "appliance"},
+            {"id": "2", "category": "electrical"},
+            {"id": "3", "category": "plumbing"},
+            {"id": "4", "category": "general_home"},
+            {"id": "5", "category": "hvac"},
+        ]
         result = select_items(items, items_to_test=None, random_mode=True)
         assert len(result) == 1
+
+    def test_random_mode_balances_categories_with_limit(self):
+        """Random mode should select an evenly distributed category mix"""
+        items: List[Dict[str, Any]] = []
+        for category in judge_eval.CATEGORIES:
+            for index in range(4):
+                items.append({"id": f"{category}_{index}", "category": category})
+
+        result = select_items(items, items_to_test=10, random_mode=True)
+
+        counts = {category: 0 for category in judge_eval.CATEGORIES}
+        for row in result:
+            counts[str(row.get("category", ""))] += 1
+
+        assert len(result) == 10
+        assert all(count == 2 for count in counts.values())
+
+    def test_random_mode_missing_required_category_raises(self):
+        """Balanced random mode should fail when a required category is missing"""
+        items = [
+            {"id": "1", "category": "appliance"},
+            {"id": "2", "category": "electrical"},
+            {"id": "3", "category": "plumbing"},
+            {"id": "4", "category": "general_home"},
+        ]
+
+        with pytest.raises(ValueError, match="required categories are missing"):
+            select_items(items, items_to_test=4, random_mode=True)
 
     def test_empty_items_returns_empty(self):
         """Empty items list returns empty"""

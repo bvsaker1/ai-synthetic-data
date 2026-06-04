@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from logging_utils import JsonEventLogger
+from src.logging_utils import JsonEventLogger, PROJECT_ROOT
 
 
 QUALITY_COLUMNS = [
@@ -116,11 +116,11 @@ def normalize_label_df(df: pd.DataFrame, labeler: str) -> pd.DataFrame:
 
 
 def _analysis_log_path(root: Path, iteration: int) -> Path:
-    return root / "logs" / f"dataset_log_{iteration}.jsonl"
+    return PROJECT_ROOT / "logs" / f"dataset_log_{iteration}.jsonl"
 
 
 def log_analysis_run_start(
-    root: Path, iteration: int, human_file: Path, judge_file: Path, data_dir: Path, output_dir: Path, min_iteration: int
+    root: Path, iteration: int, data_dir: Path, output_dir: Path, min_iteration: int, mode: str
 ) -> JsonEventLogger:
     logger = JsonEventLogger(
         log_path=str(_analysis_log_path(root, iteration)),
@@ -131,6 +131,7 @@ def log_analysis_run_start(
     startup_message = (
         "Analysis run started | "
         f"iteration={iteration} | "
+        f"mode={mode} | "
         f"data_dir={data_dir} | output_dir={output_dir} | min_iteration={min_iteration} (default=3)"
     )
     logger.log(
@@ -243,6 +244,27 @@ def save_pass_rate_chart(human_df: pd.DataFrame, judge_df: pd.DataFrame, iterati
     plt.xticks(rotation=20, ha="right")
     plt.tight_layout()
     plt.savefig(out_dir / f"pass_rate_all_qualities_iter_{iteration}.png", dpi=160)
+    plt.close()
+
+
+def save_judge_pass_rate_chart(judge_df: pd.DataFrame, iteration: int, out_dir: Path) -> None:
+    judge_rates = quality_pass_rate_percent(judge_df)
+    chart_df = pd.DataFrame(
+        {
+            "Quality": [QUALITY_LABELS[q] for q in QUALITY_AND_OVERALL_COLUMNS],
+            "Pass Rate (%)": [judge_rates[q] for q in QUALITY_AND_OVERALL_COLUMNS],
+        }
+    )
+
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=chart_df, x="Quality", y="Pass Rate (%)", color="#2171b5")
+    plt.ylim(0, 100)
+    plt.title(f"Judge Pass Rate for All Qualities (Iteration {iteration})")
+    plt.ylabel("Percent")
+    plt.xlabel("Qualities")
+    plt.xticks(rotation=20, ha="right")
+    plt.tight_layout()
+    plt.savefig(out_dir / f"judge_pass_rate_all_qualities_iter_{iteration}.png", dpi=160)
     plt.close()
 
 
@@ -373,6 +395,40 @@ def save_category_distribution_chart(dataset_df: pd.DataFrame, out_dir: Path) ->
     plt.close()
 
 
+def save_category_distribution_from_labels(label_df: pd.DataFrame, out_dir: Path) -> None:
+    working = label_df.copy()
+    if "category" not in working.columns:
+        raise ValueError("Label file must include category column for distribution chart")
+
+    working["category"] = working["category"].astype(str).str.lower()
+    actual = (
+        working[working["category"].isin(CATEGORY_ORDER)]
+        .groupby("category")
+        .size()
+        .reindex(CATEGORY_ORDER)
+        .fillna(0)
+    )
+
+    actual_pct = (actual / max(1, int(actual.sum()))) * 100.0
+    benchmark_pct = pd.Series(100.0 / len(CATEGORY_ORDER), index=CATEGORY_ORDER)
+
+    x = np.arange(len(CATEGORY_ORDER))
+    width = 0.38
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(x - width / 2, actual_pct.values, width=width, label="Actual")
+    plt.bar(x + width / 2, benchmark_pct.values, width=width, label="Benchmark")
+    plt.xticks(x, [CATEGORY_LABELS[c] for c in CATEGORY_ORDER], rotation=20, ha="right")
+    plt.ylim(0, 100)
+    plt.title("Category Distribution")
+    plt.ylabel("Percent of Total Categories")
+    plt.xlabel("Category Names")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(out_dir / "category_distribution_vs_benchmark.png", dpi=160)
+    plt.close()
+
+
 def save_dataset_quality_by_iteration_chart(
     human_df: pd.DataFrame,
     judge_by_iteration: Dict[int, pd.DataFrame],
@@ -448,25 +504,30 @@ def save_dataset_quality_by_iteration_chart(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run data analysis and generate visualizations comparing human vs LLM judge labels on home-repair QA items."
+        description="Run data analysis and generate visualizations for judge labels, with optional human-vs-judge comparison."
     )
     parser.add_argument(
         "--data-dir",
         type=Path,
         default=None,
-        help="Directory containing human_labels.jsonl and judge_labels_*.jsonl files (default: script directory)",
+        help="Directory containing human_labels.jsonl and judge_labels_*.jsonl files (default: labels directory)",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
-        help="Directory to save visualization PNG files (default: script directory/visualizations)",
+        help="Directory to save visualization PNG files (default: project_root/visualizations)",
     )
     parser.add_argument(
         "--min-iteration",
         type=int,
         default=3,
         help="Minimum judge iteration number to analyze (default: 3)",
+    )
+    parser.add_argument(
+        "--judge-only",
+        action="store_true",
+        help="Analyze judge labels only (no human label comparison).",
     )
     return parser.parse_args()
 
@@ -475,40 +536,59 @@ def main() -> None:
     args = parse_args()
     sns.set_theme(style="whitegrid")
 
-    root = args.data_dir if args.data_dir else Path(__file__).resolve().parent
-    out_dir = args.output_dir if args.output_dir else root / "visualizations"
+    root = args.data_dir if args.data_dir else PROJECT_ROOT / "labels"
+    out_dir = args.output_dir if args.output_dir else PROJECT_ROOT / "visualizations"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    human_df = load_human_labels(root)
+    human_df = None if args.judge_only else load_human_labels(root)
 
     judge_files = discover_judge_label_files(root, min_iteration=args.min_iteration)
     if not judge_files:
         raise FileNotFoundError(f"No judge_labels_<iteration>.jsonl files found for iterations >= {args.min_iteration}")
 
     judge_by_iteration: Dict[int, pd.DataFrame] = {}
-    human_label_path = root / "human_labels.jsonl"
-    if not human_label_path.exists():
-        human_label_path = root / "human_labels.json"
+    mode = "judge_only" if args.judge_only else "human_vs_judge"
 
     for iteration, file_path in judge_files:
         rows = read_json_or_jsonl(file_path)
         judge_df = normalize_label_df(pd.DataFrame(rows), labeler="judge")
         judge_by_iteration[iteration] = judge_df
 
-        analysis_logger = log_analysis_run_start(root, iteration, human_label_path, file_path, root, out_dir, args.min_iteration)
-        log_label_differences(analysis_logger, iteration, human_df, judge_df)
+        analysis_logger = log_analysis_run_start(root, iteration, root, out_dir, args.min_iteration, mode)
 
-        save_pass_rate_chart(human_df, judge_df, iteration, out_dir)
+        if args.judge_only:
+            unresolved_count = int((judge_df["overall_pass"] == False).sum())
+            total_count = int(len(judge_df.index))
+            analysis_logger.log(
+                {
+                    "event": "analysis_judge_only_summary",
+                    "iteration": iteration,
+                    "total_items": total_count,
+                    "unresolved_items": unresolved_count,
+                    "resolved_items": total_count - unresolved_count,
+                    "resolved_rate_pct": float(((total_count - unresolved_count) / max(1, total_count)) * 100.0),
+                }
+            )
+            save_judge_pass_rate_chart(judge_df, iteration, out_dir)
+        else:
+            assert human_df is not None
+            log_label_differences(analysis_logger, iteration, human_df, judge_df)
+            save_pass_rate_chart(human_df, judge_df, iteration, out_dir)
+            save_agreement_chart(human_df, judge_df, iteration, out_dir)
+
         save_heatmap_chart(judge_df, iteration, out_dir)
-        save_agreement_chart(human_df, judge_df, iteration, out_dir)
+    if args.judge_only:
+        latest_iteration = max(judge_by_iteration.keys())
+        save_category_distribution_from_labels(judge_by_iteration[latest_iteration], out_dir)
+    else:
+        assert human_df is not None
+        dataset_path = root / "human_labels_dataset.jsonl"
+        dataset_rows = read_json_or_jsonl(dataset_path)
+        dataset_df = pd.DataFrame(dataset_rows)
+        save_category_distribution_chart(dataset_df, out_dir)
 
-    dataset_path = root / "human_labels_dataset.jsonl"
-    dataset_rows = read_json_or_jsonl(dataset_path)
-    dataset_df = pd.DataFrame(dataset_rows)
-    save_category_distribution_chart(dataset_df, out_dir)
-
-    save_dataset_quality_by_iteration_chart(human_df, judge_by_iteration, out_dir)
-    save_agreement_by_iteration_chart(human_df, judge_by_iteration, out_dir)
+        save_dataset_quality_by_iteration_chart(human_df, judge_by_iteration, out_dir)
+        save_agreement_by_iteration_chart(human_df, judge_by_iteration, out_dir)
 
     generated_files = sorted(out_dir.glob("*.png"))
     print("Generated visualizations:")

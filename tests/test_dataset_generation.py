@@ -17,8 +17,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import ValidationError
 
-import dataset_generation
-from dataset_generation import (
+import src.dataset_generation as dataset_generation
+from src.dataset_generation import (
     MAX_LLM_CALLS_PER_ATTEMPT,
     RepairQABatchModel,
     RepairQAModel,
@@ -28,7 +28,7 @@ from dataset_generation import (
     parse_args,
     save_raw_dataset_append,
 )
-from logging_utils import JsonEventLogger
+from src.logging_utils import JsonEventLogger
 
 
 # Sample valid QA item

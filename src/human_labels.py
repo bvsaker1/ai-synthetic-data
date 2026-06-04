@@ -4,6 +4,8 @@ import random
 from pathlib import Path
 from typing import Any, Dict, List
 
+from src.logging_utils import PROJECT_ROOT
+
 
 CATEGORIES = ["appliance", "electrical", "plumbing", "general_home", "hvac"]
 DEFAULT_LABELER = "human"
@@ -33,14 +35,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=str,
-        default="human_labels.jsonl",
-        help="Output labels JSONL path (default: human_labels.jsonl).",
+        default=str(PROJECT_ROOT / "labels" / "human_labels.jsonl"),
+        help="Output labels JSONL path (default: labels/human_labels.jsonl).",
     )
     parser.add_argument(
         "--dataset-output",
         type=str,
-        default="human_labels_dataset.jsonl",
-        help="Output selected items JSONL path for judge evaluation (default: human_labels_dataset.jsonl).",
+        default=str(PROJECT_ROOT / "labels" / "human_labels_dataset.jsonl"),
+        help="Output selected items JSONL path for judge evaluation (default: labels/human_labels_dataset.jsonl).",
     )
     parser.add_argument(
         "--seed",
@@ -198,12 +200,14 @@ def print_item_for_review(item: Dict[str, Any], item_index: int, total: int) -> 
 
 
 def append_jsonl(path: str, row: Dict[str, Any]) -> None:
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "a", encoding="utf-8") as file:
         file.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
 def write_jsonl(path: str, rows: List[Dict[str, Any]]) -> None:
     """Write list of rows to JSONL file (overwrites if exists)."""
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as file:
         for row in rows:
             file.write(json.dumps(row, ensure_ascii=False) + "\n")

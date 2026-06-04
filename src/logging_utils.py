@@ -5,12 +5,15 @@ from pathlib import Path
 from typing import Any, Dict
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def load_env_file(env_path: str = ".env") -> None:
-    env_file = Path(env_path)
+def load_env_file(env_path: str | None = None) -> None:
+    env_file = Path(env_path) if env_path else PROJECT_ROOT / ".env"
     if not env_file.exists():
         return
 
@@ -34,12 +37,12 @@ def get_iteration(default: str = "1") -> str:
 
 def build_iteration_dataset_path(prefix: str, extension: str = ".jsonl") -> str:
     iteration = get_iteration()
-    return f"{prefix}_{iteration}{extension}"
+    return str(PROJECT_ROOT / "data" / f"{prefix}_{iteration}{extension}")
 
 
 def build_iteration_log_path(extension: str = ".jsonl") -> str:
     iteration = get_iteration()
-    return f"logs/dataset_log_{iteration}{extension}"
+    return str(PROJECT_ROOT / "logs" / f"dataset_log_{iteration}{extension}")
 
 
 class JsonEventLogger:
@@ -57,6 +60,7 @@ class JsonEventLogger:
         self.iteration = iteration or os.getenv("ITERATION", "1")
 
     def _write_row(self, row: Dict[str, Any]) -> None:
+        Path(self.log_path).parent.mkdir(parents=True, exist_ok=True)
         with open(self.log_path, "a", encoding="utf-8") as file:
             file.write(json.dumps(row, ensure_ascii=False) + "\n")
 

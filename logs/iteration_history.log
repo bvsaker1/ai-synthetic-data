@@ -260,18 +260,25 @@
 
                 python3 judge_eval.py 
 
-### Iteration 8: Fix UNRESOLVED rate for category appliance for Tip Usefulness
+### Iteration 8: Fix 75% UNRESOLVED rate for category appliance for Tip Usefulness
 - **Date**: 2026-05-29
 - **Change**: 
                 Updating the the appliance category template prompt and target tip
-                usefulness.
+                usefulness. See dataset_prompt_8.log
 
 - **Hypothesis**: The category appliance tip usefulness failure will fall toward
                 the 20% failure rate
                 will lower significantly. The goal is down to 20%.
 
-- **Result**: TBD
+- **Result**: - Tip Usefulness for category Appliance failures fell to 0% and 15%
+                across all categories which is within spec.  
+              - Answer Completeness overall has a 25% unresolved rate across all 
+                categories and a 50% unresolved rate for the Appliance category.
+              - Overall pass rate dropped to 25% from 60% in iteration 6.
 
-- **Decision**: TBD
+- **Decision**: Answer Completeness is not within spec so update it's prompt.
 
-- **Next step**: TBD
+- **Next step**: Run iteration 9 on Answer Completeness with concentration on 
+                Appliance category.   Do this after updating the prompt to
+                lower the unresolved rate for this quality with focus on 
+                appliance.
