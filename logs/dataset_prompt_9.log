@@ -1,6 +1,6 @@
 ####################################################################################################
 DATASET PROMPT RUN HEADER
-timestamp_utc: 2026-06-04T00:58:58.667652+00:00
+timestamp_utc: 2026-06-04T23:56:48.929033+00:00
 iteration: 9
 model: llama-3.3-70b-versatile
 count_per_template: 10
@@ -37,12 +37,6 @@ Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearl
 Q8 Category Accuracy: content must match appliance_repair.
 
 Key principles for dataset creation:
-- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
-- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
-- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
-- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
-- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
-- Keep the answer focused, but use a full narrative rather than fragments or overly terse instructions.
 - Provide a substantial narrative answer, typically around 700-1300 characters.
 - Safety guidance must be task-specific and hazard-specific.
 - Tips should include practical, non-obvious insights a beginner might not know.
@@ -63,6 +57,12 @@ GOOD tip examples (what to aim for):
 GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
 Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
 
+CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
 Output JSON schema:
 {
   "question": "...",
@@ -79,9 +79,6 @@ Return JSON only. No markdown.
 Appliance-specific guidance to append to generic instructions:
 - Focus on common household appliances such as refrigerator, dishwasher, washer, dryer, microwave, and oven.
 - Insure to include a balanced mix of appliances so that one appliance type doesn't dominate the examples (e.g. don't just do 10 dryer issues).
-- If the answer uses tools_required, explicitly work those tools into the steps and narrative (for example: screwdriver, vacuum, Torx driver, wrench).
-- Make the answer complete by naming the likely failing subsystem or component, the repair or adjustment, and the confirmation check after the fix.
-- If the symptom is vague, explain the diagnostic path in the answer so the reader knows how to narrow it down before replacing parts.
 - Include model-agnostic troubleshooting steps before replacement (power check, filters, drain path, lint, door seals, leveling), and stop short of sealed-system, refrigerant, or other technician-only work.
 - Prefer homeowner-safe actions first; clearly escalate when high-voltage, refrigerant, gas, or sealed-system work is involved.
 - Include observable diagnostics in steps (error codes, sounds, vibration, heat level, standing water, cycle completion).
@@ -121,12 +118,6 @@ Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearl
 Q8 Category Accuracy: content must match electrical_repair.
 
 Key principles for dataset creation:
-- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
-- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
-- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
-- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
-- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
-- Keep the answer focused, but use a full narrative rather than fragments or overly terse instructions.
 - Provide a substantial narrative answer, typically around 700-1300 characters.
 - Safety guidance must be task-specific and hazard-specific.
 - Tips should include practical, non-obvious insights a beginner might not know.
@@ -147,6 +138,12 @@ GOOD tip examples (what to aim for):
 GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
 Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
 
+CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
 Output JSON schema:
 {
   "question": "...",
@@ -163,9 +160,6 @@ Return JSON only. No markdown.
 Electrical-specific guidance to append to generic instructions:
 - You are an expert home electrician providing detailed, step-by-step repair instructions for common household electrical issues.
 - Your guidance should be safe, practical, and accessible for a homeowner with basic DIY skills.
-- If tools_required is present, explicitly mention the safe homeowner tools in the answer or steps (for example: non-contact voltage tester, screwdriver, wire stripper only when truly appropriate).
-- Make the answer complete by identifying the likely circuit, device, or connection point, then stating the fix and the test that confirms it worked.
-- If the issue could have more than one cause, explain how to distinguish them in the answer before touching wiring.
 Always prioritize safety and include clear escalation points to licensed electricians when repairs involve high-voltage, complex wiring, or potential code violations.
 - Example topics: non-working outlets, tripped breakers, switch replacement, GFCI resets.
 - Include strict safety escalation for panel work, unknown wiring, aluminum wiring, damaged wires, or signs of overheating/arcing; do not frame wire replacement as a DIY step.
@@ -205,12 +199,6 @@ Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearl
 Q8 Category Accuracy: content must match plumbing_repair.
 
 Key principles for dataset creation:
-- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
-- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
-- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
-- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
-- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
-- Keep the answer focused, but use a full narrative rather than fragments or overly terse instructions.
 - Provide a substantial narrative answer, typically around 700-1300 characters.
 - Safety guidance must be task-specific and hazard-specific.
 - Tips should include practical, non-obvious insights a beginner might not know.
@@ -231,6 +219,12 @@ GOOD tip examples (what to aim for):
 GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
 Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
 
+CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
 Output JSON schema:
 {
   "question": "...",
@@ -245,9 +239,6 @@ Output JSON schema:
 Return JSON only. No markdown.
 
 Plumbing-specific guidance to append to generic instructions:
-- If tools_required is present, explicitly work the tools into the answer or steps (for example: adjustable wrench, basin wrench, pliers, bucket).
-- Make the answer complete by naming the likely failing part of the water path (valve, cartridge, trap, seal, flange, supply line) and the check that proves the repair.
-- If the symptom can come from multiple plumbing locations, explain the order of diagnosis so the answer feels finished instead of generic.
 - Example topics: leaks, clogs, shutoff valves, traps, toilet fill/flush issues, fixture replacement, water heaters.
 - Include when to escalate to licensed plumber (main line, sewer, hidden leaks behind walls, code-required work), and do not suggest DIY tank replacement.
 - Tips must be NON-OBVIOUS plumbing insights, NOT maintenance checklists. Examples of GOOD tips:
@@ -286,12 +277,6 @@ Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearl
 Q8 Category Accuracy: content must match hvac_maintenance.
 
 Key principles for dataset creation:
-- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
-- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
-- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
-- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
-- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
-- Keep the answer focused, but use a full narrative rather than fragments or overly terse instructions.
 - Provide a substantial narrative answer, typically around 700-1300 characters.
 - Safety guidance must be task-specific and hazard-specific.
 - Tips should include practical, non-obvious insights a beginner might not know.
@@ -312,6 +297,12 @@ GOOD tip examples (what to aim for):
 GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
 Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
 
+CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
 Output JSON schema:
 {
   "question": "...",
@@ -326,9 +317,6 @@ Output JSON schema:
 Return JSON only. No markdown.
 
 HVAC-specific guidance to append to generic instructions:
-- If tools_required is present, explicitly mention the safe homeowner tools in the answer or steps (for example: screwdriver, flashlight, filter, coil brush only when truly appropriate).
-- Make the answer complete by naming the likely subsystem (airflow, thermostat, ignition, condensate, blower, filter, refrigerant side) and the verification step after the fix.
-- If symptoms overlap, explain the simple diagnostic order so the reader can tell whether the fault is airflow, control, or mechanical.
 - Example topics: filter changes, thermostat checks, condensate drain cleaning, airflow balancing, furnace not running, ac not running.
 - Include when to escalate to certified technician (refrigerant handling, compressor faults, electrical control board issues), and never imply compressor or refrigerant replacement is DIY.
 - Tips must be NON-OBVIOUS HVAC insights, NOT maintenance reminders. Examples of GOOD tips:
@@ -367,12 +355,6 @@ Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearl
 Q8 Category Accuracy: content must match general_home_repair.
 
 Key principles for dataset creation:
-- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
-- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
-- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
-- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
-- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
-- Keep the answer focused, but use a full narrative rather than fragments or overly terse instructions.
 - Provide a substantial narrative answer, typically around 700-1300 characters.
 - Safety guidance must be task-specific and hazard-specific.
 - Tips should include practical, non-obvious insights a beginner might not know.
@@ -393,6 +375,12 @@ GOOD tip examples (what to aim for):
 GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
 Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
 
+CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+- If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+- Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+- The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+- Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+- When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
 Output JSON schema:
 {
   "question": "...",
@@ -407,8 +395,6 @@ Output JSON schema:
 Return JSON only. No markdown.
 
 General home-repair-specific guidance to append to generic instructions:
-- Make the answer complete by naming the material or hardware being repaired, the corrective action, and how to verify the result.
-- If the issue could have a hidden cause, briefly state the likely root cause so the answer reads as a full repair plan.
 - Example topics: minor drywall damage, trim fixes, caulking, squeaky hinges, weatherstripping, painting touch-ups, door adjustments.
 - Include escalation when repairs involve structural, electrical-panel, gas, or major plumbing risks.
 - Tips must be NON-OBVIOUS general home repair insights, NOT irrelevant tool advice. Examples of GOOD tips:

@@ -263,7 +263,7 @@
 ### Iteration 8: Fix 75% UNRESOLVED rate for category appliance for Tip Usefulness
 - **Date**: 2026-05-29
 - **Change**: 
-                Updating the the appliance category template prompt and target tip
+                Updating the appliance category template prompt and target tip
                 usefulness. See dataset_prompt_8.log
 
 - **Hypothesis**: The category appliance tip usefulness failure will fall toward
@@ -274,7 +274,7 @@
                 across all categories which is within spec.  
               - Answer Completeness overall has a 25% unresolved rate across all 
                 categories and a 50% unresolved rate for the Appliance category.
-              - Overall pass rate dropped to 25% from 60% in iteration 6.
+              - Overall pass rate dropped to 45% from 60% in iteration 6.
 
 - **Decision**: Answer Completeness is not within spec so update it's prompt.
 
@@ -282,3 +282,55 @@
                 Appliance category.   Do this after updating the prompt to
                 lower the unresolved rate for this quality with focus on 
                 appliance.
+
+### Iteration 9: Fix Answer Completeness UNRESOLVED issues with appliance focus
+- **Date**: 2026-06-04
+- **Change**: 
+                Updating the Answer Completeness in the generic template 
+                base_template.py file prompt. See logs/dataset_prompt_9.log 
+                and explanation in docs/dataset_prompt_9.md.
+
+- **Hypothesis**: The Answer Completeness quality failures will fall toward
+                the 20% failure rate. The goal is down to 20% or below.
+
+- **Result**: - Answer Completness did fall to the 15% failure rate which is
+                is in spec. 
+              - Now all qualities pass at 80% or better but the overall pass 
+                rate for a question/answer pair remained at 45% which is below 
+                the target 80%, desired pass rate. 
+              - The electrical category has a 75% fail rate for scope 
+                appropriateness.
+              - HVAC has 75% failure rate for tool realism and tip usefulness.
+              - Overall pass rate remained at 45% from 60% in iteration 6.
+
+- **Decision**: Answer Completeness is within spec but overall pass rate for 
+                the q/a pairs is at 45% update prompt.
+
+- **Next step**: - Fix prompt on electrical category for Scope Appropriateness.
+                 - Fix prompt on hvac category for Tool Realism and Tip 
+                 Usefulness.
+                 - Fix prompt on plumbing category for Answer Completeness.
+
+### Iteration 10: Fix 75% UNRESOLVED rate for category electrical for Scope 
+                Appropriateness, HVAC for Tool Realism and Tip Usefulness 
+                and Plumbing Answer Completeness
+- **Date**: 2026-06-05
+- **Change**: 
+                - Updated the electrical category template prompt and targeted 
+                scope appropriateness regarding panel upgrades. See 
+                logs/dataset_prompt_10.log and docs/dataset_prompt.md.
+                - Updated the HVAC category template prompt and targeted
+                Tool Realism with regard to thermostats, pilot light and
+                refrigerant leak detector.
+                - Updated the HVAC category template prompt and also 
+                targeted Tip Usefulness where tips were vague and obvious and
+                not task specific.
+
+- **Hypothesis**: The prompt corrections will cause the failure rate of those
+                qualites to fall toward the overall 20% failure rate and corrected
+                quality shortcomings of the mentioned categories.
+
+- **Result**: - TBD
+
+- **Decision**: TBD
+- **Next step**: TBD
