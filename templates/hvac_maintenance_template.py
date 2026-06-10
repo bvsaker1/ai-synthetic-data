@@ -15,6 +15,14 @@ HVAC_SPECIFIC_PROMPT_INFO = (
 	"  * For low AC cooling: 'A frozen evaporator coil (not low refrigerant) causes weak airflow—check the condensate drain for blockages first'\n"
 	"  * For a noisy blower: 'Rattling usually means a loose access panel or duct, not a failing motor—tighten fasteners before calling for service'\n"
 	"- AVOID: Generic filter reminders, obvious maintenance checklists, or redundant diagnostic steps."
+	"- CRITICAL GUIDANCE ON TOOL REALISM (Q3 Tool Realism):\n"
+	"  * A thermostat or pilot light are not normal homeowner tools and cost more than $50.\n"
+	"  * A refrigerant leak detector is not a normal homeowner tool and it's use is out of scope.\n"
+	"- CRITICAL GUIDANCE ON TIP USEFULNESS (Q6 Tip Usefulness):\n"
+	"  * Tips MUST NOT be vague and obvious.\nExamples to follow:\n"
+	"  * For a question on how to fix a faulty thermostat DO NOT give tips saying that a faulty thermostat can cause uneven heating.\n"
+	"  * For a question on why furnace is not turning on, a tip saying that a faulty thermostat can cause the furnace not to turn on is obvious and should be in the answer not the tip.\n"
+	"  * For a question on why furnace is not heating, cleaning the ignition sensor or checking for debris on the pilot should not be tips if is something already in the answer with instructions to check.\n"
 )
 
 

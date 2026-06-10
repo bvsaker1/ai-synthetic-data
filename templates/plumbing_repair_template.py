@@ -14,7 +14,10 @@ PLUMBING_SPECIFIC_PROMPT_INFO = (
 	"  * For a leaking faucet: 'If tightening the packing nut doesn't stop dripping, the cartridge seal is worn—replacing the cartridge is cheaper than a new faucet'\n"
 	"  * For a running toilet: 'Listen closely—if water hisses, the fill valve is leaking; if it gurgles, the flapper is stuck'\n"
 	"  * For low water pressure: 'Check the shutoff valve first—it's often partially closed after work; sediment in aerators is second'\n"
-	"- AVOID: Generic maintenance checks, obvious preventive actions, or redundant drain/leak troubleshooting."
+	"- AVOID: Generic maintenance checks, obvious preventive actions, or redundant drain/leak troubleshooting.\n"
+	"- CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q1 Answer Completeness):\n"
+	"  * Answers should mention the need and use of plumber's tape for repairs that need it.\n"
+	"  * Tools listed MUST be explicity mentioned or clearly implied in the answer."
 )
 
 

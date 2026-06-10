@@ -42,6 +42,14 @@ CATEGORY_LABELS = {
     "general_home": "General Home",
 }
 
+CATEGORY_ALIASES = {
+    "appliance_repair": "appliance",
+    "electrical_repair": "electrical",
+    "plumbing_repair": "plumbing",
+    "hvac_maintenance": "hvac",
+    "general_home_repair": "general_home",
+}
+
 
 def read_json_or_jsonl(path: Path) -> List[Dict[str, Any]]:
     if path.suffix == ".json":
@@ -110,7 +118,7 @@ def normalize_label_df(df: pd.DataFrame, labeler: str) -> pd.DataFrame:
         normalized[quality] = normalized[quality].clip(lower=0, upper=1)
 
     normalized["overall_pass"] = normalized["overall_pass"].astype(bool)
-    normalized["category"] = normalized["category"].astype(str).str.lower()
+    normalized["category"] = normalized["category"].astype(str).str.lower().replace(CATEGORY_ALIASES)
     normalized["trace_id"] = normalized["trace_id"].astype(str)
     return normalized
 

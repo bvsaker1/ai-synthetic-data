@@ -23,9 +23,37 @@ from templates.hvac_maintenance_template import build_hvac_maintenance_messages
 from templates.plumbing_repair_template import build_plumbing_repair_messages
 
 
-DEFAULT_GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+DEFAULT_DATASET_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_DATASET_TEMPERATURE = 0.7
 MAX_LLM_CALLS_PER_ATTEMPT = 5
 TEMPLATE_CHOICES = ["appliance", "electrical", "plumbing", "hvac", "general_home"]
+
+
+def resolve_dataset_model_default() -> str:
+    model = os.getenv("DATASET_MODEL", "").strip()
+    if model:
+        return model
+
+    # Backward-compatible fallback for older env setups.
+    fallback_model = os.getenv("GROQ_MODEL", "").strip()
+    if fallback_model:
+        return fallback_model
+    return DEFAULT_DATASET_MODEL
+
+
+def resolve_dataset_temperature_default() -> float:
+    raw_value = os.getenv("DATASET_TEMPERATURE", "").strip()
+    if not raw_value:
+        return DEFAULT_DATASET_TEMPERATURE
+
+    try:
+        value = float(raw_value)
+    except ValueError as error:
+        raise ValueError(f"DATASET_TEMPERATURE must be a float, got: {raw_value!r}") from error
+
+    if value < 0 or value > 2:
+        raise ValueError(f"DATASET_TEMPERATURE must be between 0 and 2, got: {value}")
+    return value
 
 
 def build_iteration_prompt_log_path(iteration: str) -> str:
@@ -138,11 +166,16 @@ class RepairQABatchModel(BaseModel):
     items: List[RepairQAModel] = Field(..., min_length=1)
 
 
-def call_llm_typed_batch(client: Any, model: str, messages: List[Dict[str, str]]) -> List[Dict[str, Any]]:
+def call_llm_typed_batch(
+    client: Any,
+    model: str,
+    temperature: float,
+    messages: List[Dict[str, str]],
+) -> List[Dict[str, Any]]:
     response = client.chat.completions.create(
         model=model,
         messages=messages,
-        temperature=0.7,
+        temperature=temperature,
         response_model=RepairQABatchModel,
     )
     return [item.model_dump() for item in response.items]
@@ -151,13 +184,14 @@ def call_llm_typed_batch(client: Any, model: str, messages: List[Dict[str, str]]
 def generate_items_from_template(
     client: Any,
     model: str,
+    temperature: float,
     template_builder_func,
     category_name: str,
     count: int,
     logger: JsonEventLogger,
 ) -> List[Dict[str, Any]]:
     messages = template_builder_func(count=count)
-    valid_items = call_llm_typed_batch(client, model, messages)
+    valid_items = call_llm_typed_batch(client, model, temperature, messages)
     logger.print_and_log(
         f"  Instructor validated {len(valid_items)} items from {category_name}",
         {"category": category_name, "validated_count": len(valid_items)},
@@ -168,6 +202,7 @@ def generate_items_from_template(
 def generate_candidate_items(
     client: Any,
     model: str,
+    temperature: float,
     template_builder_func,
     category_name: str,
     count: int,
@@ -180,6 +215,7 @@ def generate_candidate_items(
             batch_items = generate_items_from_template(
                 client=client,
                 model=model,
+                temperature=temperature,
                 template_builder_func=template_builder_func,
                 category_name=category_name,
                 count=count,
@@ -224,6 +260,8 @@ def save_raw_dataset_append(rows: List[Dict[str, Any]], output_path: str) -> Non
 
 def parse_args() -> argparse.Namespace:
     load_env_file()
+    default_dataset_model = resolve_dataset_model_default()
+    default_dataset_temperature = resolve_dataset_temperature_default()
     default_raw_output = build_iteration_dataset_path("raw_diy_dataset")
     parser = argparse.ArgumentParser(description="Generate raw DIY repair QA dataset from 5 templates.")
     parser.add_argument(
@@ -235,8 +273,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         type=str,
-        default=DEFAULT_GROQ_MODEL,
-        help=f"Groq model name (default: {DEFAULT_GROQ_MODEL}).",
+        default=default_dataset_model,
+        help=(
+            "Groq model name. Reads DATASET_MODEL from .env when set "
+            f"(fallback default: {default_dataset_model})."
+        ),
+    )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=default_dataset_temperature,
+        help=(
+            "Sampling temperature (0-2). Reads DATASET_TEMPERATURE from .env when set "
+            f"(fallback default: {default_dataset_temperature})."
+        ),
     )
     parser.add_argument(
         "--raw-output",
@@ -340,6 +390,7 @@ def main() -> None:
         raw_items = generate_candidate_items(
             client=client,
             model=args.model,
+            temperature=args.temperature,
             template_builder_func=template_builder,
             category_name=template_category_name,
             count=args.count,

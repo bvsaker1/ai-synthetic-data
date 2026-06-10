@@ -41,9 +41,8 @@ from src.logging_utils import (
 #    The category must correctly match the repair domain.
 
 
-# DEFAULT_JUDGE_MODEL = os.getenv("JUDGE_MODEL", "llama-3.3-70b-versatile")
-# DEFAULT_JUDGE_MODEL = os.getenv("JUDGE_MODEL", "openai/gpt-oss-20b")
-DEFAULT_JUDGE_MODEL = os.getenv("JUDGE_MODEL", "openai/gpt-oss-120b")
+DEFAULT_JUDGE_MODEL = "openai/gpt-oss-120b"
+DEFAULT_JUDGE_TEMPERATURE = 0.3
 DEFAULT_MAX_TPM = int(os.getenv("JUDGE_MAX_TPM", "8000"))
 DEFAULT_MAX_COMPLETION_TOKENS = 800
 DEFAULT_MAX_RETRIES = int(os.getenv("JUDGE_MAX_RETRIES", "5"))
@@ -75,11 +74,40 @@ def resolve_max_completion_tokens_default() -> int:
     return value
 
 
+def resolve_judge_model_default() -> str:
+    model = os.getenv("JUDGE_MODEL", "").strip()
+    if model:
+        return model
+    return DEFAULT_JUDGE_MODEL
+
+
+def resolve_judge_temperature_default() -> float:
+    raw_value = os.getenv("JUDGE_TEMPERATURE", "").strip()
+    if not raw_value:
+        return DEFAULT_JUDGE_TEMPERATURE
+
+    try:
+        value = float(raw_value)
+    except ValueError as error:
+        raise ValueError(f"JUDGE_TEMPERATURE must be a float, got: {raw_value!r}") from error
+
+    if value < 0 or value > 2:
+        raise ValueError(f"JUDGE_TEMPERATURE must be between 0 and 2, got: {value}")
+    return value
+
+
 def build_iteration_path(prefix: str, iteration: str, extension: str = ".jsonl", subdir: str | None = None) -> str:
     filename = f"{prefix}_{iteration}{extension}"
     if subdir:
         return str(PROJECT_ROOT / subdir / filename)
     return str(PROJECT_ROOT / filename)
+
+
+def write_jsonl(path: str, rows: List[Dict[str, Any]]) -> None:
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as file:
+        for row in rows:
+            file.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
 def load_judge_prompt_template(prompt_path: str) -> Dict[str, str]:
@@ -122,6 +150,8 @@ def load_judge_prompt_template(prompt_path: str) -> Dict[str, str]:
 
 def parse_args() -> argparse.Namespace:
     load_env_file()
+    judge_model_default = resolve_judge_model_default()
+    judge_temperature_default = resolve_judge_temperature_default()
     max_completion_tokens_default = resolve_max_completion_tokens_default()
     parser = argparse.ArgumentParser(description="LLM judge for home-repair QA datasets.")
     parser.add_argument(
@@ -143,6 +173,12 @@ def parse_args() -> argparse.Namespace:
         help="Output labels JSONL path. Defaults to project_root/labels/judge_labels_<iteration>.jsonl.",
     )
     parser.add_argument(
+        "--dataset-output",
+        type=str,
+        default=None,
+        help="Output selected judge dataset JSONL path. Defaults to project_root/data/judge_dataset_<iteration>.jsonl.",
+    )
+    parser.add_argument(
         "--prompt-template",
         type=str,
         default=None,
@@ -151,8 +187,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         type=str,
-        default=DEFAULT_JUDGE_MODEL,
-        help=f"Judge model name. Default: {DEFAULT_JUDGE_MODEL}",
+        default=judge_model_default,
+        help=(
+            "Judge model name. Reads JUDGE_MODEL from .env when set "
+            f"(fallback default: {judge_model_default})."
+        ),
+    )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=judge_temperature_default,
+        help=(
+            "Judge sampling temperature (0-2). Reads JUDGE_TEMPERATURE from .env when set "
+            f"(fallback default: {judge_temperature_default})."
+        ),
     )
     parser.add_argument(
         "--max-tpm",
@@ -196,6 +244,7 @@ def parse_args() -> argparse.Namespace:
     args = parser.parse_args()
     args.dataset = args.dataset or build_iteration_path("diy_dataset", args.iteration, subdir="data")
     args.output = args.output or build_iteration_path("judge_labels", args.iteration, subdir="labels")
+    args.dataset_output = args.dataset_output or build_iteration_path("judge_dataset", args.iteration, subdir="data")
     args.prompt_template = args.prompt_template or build_iteration_path("judge_prompt", args.iteration, extension=".json", subdir="templates")
     return args
 
@@ -575,6 +624,7 @@ def _normalize_judge_output(raw: Dict[str, Any]) -> Dict[str, Any]:
 def judge_one_item(
     client: Groq,
     model: str,
+    temperature: float,
     item: Dict[str, Any],
     limiter: TokenRateLimiter,
     max_completion_tokens: int,
@@ -602,8 +652,7 @@ def judge_one_item(
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
                 ],
-                # Prefer deterministic output to reduce invalid JSON responses.
-                temperature=0.3,
+                temperature=temperature,
                 max_completion_tokens=max_completion_tokens,
                 response_format={"type": "json_object"},
             )
@@ -640,8 +689,10 @@ def judge_one_item(
 def run_judge(
     dataset_path: str,
     output_path: str,
+    dataset_output_path: str,
     prompt_template_path: str,
     model: str,
+    temperature: float,
     max_tpm: int,
     max_completion_tokens: int,
     max_retries: int,
@@ -657,6 +708,7 @@ def run_judge(
     prompt_template = load_judge_prompt_template(prompt_template_path)
     all_items = read_dataset(dataset_path)
     items = select_items(all_items, items_to_test=items_to_test, random_mode=random_mode)
+    write_jsonl(dataset_output_path, items)
     client = Groq(api_key=api_key)
     limiter = TokenRateLimiter(max_tokens_per_window=max_tpm)
     runtime_error_count = 0
@@ -668,8 +720,10 @@ def run_judge(
     startup_message = (
         "Judge eval run started | "
         f"iteration={iteration} | "
-        f"dataset={dataset_path} | output={output_path} | prompt_template={prompt_template_path} | "
+        f"dataset={dataset_path} | selected_dataset_output={dataset_output_path} | output={output_path} | "
+        f"prompt_template={prompt_template_path} | "
         f"model={model} (default={DEFAULT_JUDGE_MODEL}) | "
+        f"temperature={temperature} (default={DEFAULT_JUDGE_TEMPERATURE}) | "
         f"max_tpm={max_tpm} (default={DEFAULT_MAX_TPM}) | "
         f"max_completion_tokens={max_completion_tokens} (default={DEFAULT_MAX_COMPLETION_TOKENS}) | "
         f"max_retries={max_retries} (default={DEFAULT_MAX_RETRIES}) | "
@@ -678,6 +732,7 @@ def run_judge(
     )
     logger.log({"event": "judge_eval_start", "message": startup_message})
     print(startup_message)
+    print(f"Saved selected judge dataset to {dataset_output_path}")
 
     with open(output_path, "w", encoding="utf-8") as out:
         for index, item in enumerate(items, start=1):
@@ -693,6 +748,7 @@ def run_judge(
                     judgment = judge_one_item(
                         client=client,
                         model=model,
+                        temperature=temperature,
                         item=item,
                         limiter=limiter,
                         max_completion_tokens=max_completion_tokens,
@@ -821,8 +877,10 @@ def main() -> None:
     run_judge(
         dataset_path=args.dataset,
         output_path=args.output,
+        dataset_output_path=args.dataset_output,
         prompt_template_path=args.prompt_template,
         model=args.model,
+        temperature=args.temperature,
         max_tpm=args.max_tpm,
         max_completion_tokens=args.max_completion_tokens,
         max_retries=args.max_retries,

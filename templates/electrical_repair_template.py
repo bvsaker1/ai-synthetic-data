@@ -17,7 +17,12 @@ ELECTRICAL_SPECIFIC_PROMPT_INFO = (
 	"  * For flickering lights: 'Intermittent flickering often means a loose connection at the breaker, not the light fixture itself'\n"
 	"  * For tripped breaker: 'If it trips immediately, there's a short circuit; if it trips after running, the circuit is overloaded'\n"
 	"  * For a dimmer switch: 'Not all LED bulbs work with dimmers—look for \"dimmable\" rating to avoid strobing or failure'\n"
-	"- AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps."
+	"- AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps.\n"
+	"- CRITICAL GUIDANCE ON SCOPE APPROPRIATENESS (Q4 Scope Appropriateness):\n"
+	"  * Scope Appropriateness MUST keep in mind the limitations of normal home owner.\n"
+	"  * Replacing an electrical panel is out of scope and should be done by an electrician. However, replacing a circuit breaker is ok.\n"
+	"  * Adding a new circuit to an electrical panel is out of scope and should be done by an electrician.\n"
+	"  * Wiring an entire room is out of scope because the task is too big to be done in under an hour.\n"
 )
 
 
