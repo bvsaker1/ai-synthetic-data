@@ -18,6 +18,9 @@ APPLIANCE_SPECIFIC_PROMPT_INFO = (
 	"  * For a dishwasher not cleaning: 'Hard water mineral buildup blocks spray arms more than dirty filters—run vinegar cycles monthly'\n"
 	"  * For an oven not heating evenly: 'If one side heats more than the other, the heating element may be failing, not miscalibration'\n"
 	"- AVOID: Generic checks, maintenance reminders, or redundant troubleshooting already in steps."
+	"- CRITICAL Tool Realism guidance."
+	"  * Tools MUST be common homeowner tools."
+	"  * A thermostat, lid switch and ignitor are appliance parts and not a common homeowner tools."
 )
 
 
