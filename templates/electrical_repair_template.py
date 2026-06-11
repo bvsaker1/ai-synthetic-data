@@ -21,7 +21,7 @@ ELECTRICAL_SPECIFIC_PROMPT_INFO = (
 	"- AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps.\n"
 	"- CRITICAL GUIDANCE ON SCOPE APPROPRIATENESS (Q4 Scope Appropriateness):\n"
 	"  * Scope Appropriateness MUST keep in mind the limitations of normal home owner.\n"
-	"  * Replacing an electrical panel is out of scope and should be done by an electrician. However, replacing a circuit breaker is ok.\n"
+	"  * Replacing an electrical panel or circuit breaker is out of scope and should be done by an electrician.\n"
 	"  * Adding a new circuit to an electrical panel is out of scope and should be done by an electrician.\n"
 	"  * Wiring an entire room is out of scope because the task is too big to be done in under an hour.\n"
 )
