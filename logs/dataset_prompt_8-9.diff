@@ -1,0 +1,57 @@
+3,4c3,4
+< timestamp_utc: 2026-06-02T01:50:24.518128+00:00
+< iteration: 8
+---
+> timestamp_utc: 2026-06-04T23:56:48.929033+00:00
+> iteration: 9
+59a60,65
+> CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+> - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+> - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+> - The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+> - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+> - When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
+76c82
+< - Include model-agnostic troubleshooting steps before replacement (power check, filters, drain path, lint, door seals, leveling).
+---
+> - Include model-agnostic troubleshooting steps before replacement (power check, filters, drain path, lint, door seals, leveling), and stop short of sealed-system, refrigerant, or other technician-only work.
+134a141,146
+> CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+> - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+> - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+> - The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+> - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+> - When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
+153c165
+< - Include strict safety escalation for panel work, unknown wiring, aluminum wiring, or signs of overheating/arcing.
+---
+> - Include strict safety escalation for panel work, unknown wiring, aluminum wiring, damaged wires, or signs of overheating/arcing; do not frame wire replacement as a DIY step.
+209a222,227
+> CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+> - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+> - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+> - The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+> - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+> - When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
+225c243
+< - Include when to escalate to licensed plumber (main line, sewer, hidden leaks behind walls, code-required work).
+---
+> - Include when to escalate to licensed plumber (main line, sewer, hidden leaks behind walls, code-required work), and do not suggest DIY tank replacement.
+281a300,305
+> CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+> - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+> - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+> - The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+> - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+> - When relevant, briefly explain why the fix works so the response reads like a finished repair plan.
+297c321
+< - Include when to escalate to certified technician (refrigerant handling, compressor faults, electrical control board issues).
+---
+> - Include when to escalate to certified technician (refrigerant handling, compressor faults, electrical control board issues), and never imply compressor or refrigerant replacement is DIY.
+353a378,383
+> CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q5 Answer Completeness):
+> - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+> - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+> - The answer should feel complete: name the likely cause, the fix, how to verify success, and when to stop.
+> - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+> - When relevant, briefly explain why the fix works so the response reads like a finished repair plan.

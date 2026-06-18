@@ -1,0 +1,165 @@
+3,4c3,4
+< timestamp_utc: 2026-06-10T22:16:05.227511+00:00
+< iteration: 11
+---
+> timestamp_utc: 2026-06-10T23:34:50.349520+00:00
+> iteration: 12
+41,54c41,55
+< CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+< Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+< AVOID these common tip mistakes:
+< - DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+< - DO NOT suggest obvious troubleshooting steps that are already in the main steps
+< - DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+< - DO NOT suggest redundant information from the answer section
+< GOOD tip examples (what to aim for):
+< - For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+< - For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+< - For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+< - For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+< GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+< Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+---
+> CRITICAL GUIDANCE ON TIPS (Q6 Tip Usefulness):
+> - Tips MUST be non-obvious and provide task-specific insights that beginners don't naturally know.
+> - AVOID these common tip mistakes:
+>   * DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+>   * DO NOT suggest obvious troubleshooting steps that are already in the main steps
+>   * DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+>   * DO NOT suggest redundant information from the answer section
+>   * DO NOT repeat safety information as a tip
+> - GOOD tip examples (what to aim for):
+>   * For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+>   * For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+>   * For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+>   * For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+> - GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+> - Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+117,130c118,132
+< CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+< Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+< AVOID these common tip mistakes:
+< - DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+< - DO NOT suggest obvious troubleshooting steps that are already in the main steps
+< - DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+< - DO NOT suggest redundant information from the answer section
+< GOOD tip examples (what to aim for):
+< - For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+< - For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+< - For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+< - For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+< GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+< Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+---
+> CRITICAL GUIDANCE ON TIPS (Q6 Tip Usefulness):
+> - Tips MUST be non-obvious and provide task-specific insights that beginners don't naturally know.
+> - AVOID these common tip mistakes:
+>   * DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+>   * DO NOT suggest obvious troubleshooting steps that are already in the main steps
+>   * DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+>   * DO NOT suggest redundant information from the answer section
+>   * DO NOT repeat safety information as a tip
+> - GOOD tip examples (what to aim for):
+>   * For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+>   * For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+>   * For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+>   * For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+> - GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+> - Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+164c166
+<   * Replacing an electrical panel is out of scope and should be done by an electrician. However, replacing a circuit breaker is ok.
+---
+>   * Replacing an electrical panel or circuit breaker is out of scope and should be done by an electrician.
+198,211c200,214
+< CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+< Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+< AVOID these common tip mistakes:
+< - DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+< - DO NOT suggest obvious troubleshooting steps that are already in the main steps
+< - DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+< - DO NOT suggest redundant information from the answer section
+< GOOD tip examples (what to aim for):
+< - For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+< - For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+< - For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+< - For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+< GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+< Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+---
+> CRITICAL GUIDANCE ON TIPS (Q6 Tip Usefulness):
+> - Tips MUST be non-obvious and provide task-specific insights that beginners don't naturally know.
+> - AVOID these common tip mistakes:
+>   * DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+>   * DO NOT suggest obvious troubleshooting steps that are already in the main steps
+>   * DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+>   * DO NOT suggest redundant information from the answer section
+>   * DO NOT repeat safety information as a tip
+> - GOOD tip examples (what to aim for):
+>   * For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+>   * For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+>   * For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+>   * For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+> - GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+> - Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+274,287c277,291
+< CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+< Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+< AVOID these common tip mistakes:
+< - DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+< - DO NOT suggest obvious troubleshooting steps that are already in the main steps
+< - DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+< - DO NOT suggest redundant information from the answer section
+< GOOD tip examples (what to aim for):
+< - For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+< - For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+< - For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+< - For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+< GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+< Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+---
+> CRITICAL GUIDANCE ON TIPS (Q6 Tip Usefulness):
+> - Tips MUST be non-obvious and provide task-specific insights that beginners don't naturally know.
+> - AVOID these common tip mistakes:
+>   * DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+>   * DO NOT suggest obvious troubleshooting steps that are already in the main steps
+>   * DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+>   * DO NOT suggest redundant information from the answer section
+>   * DO NOT repeat safety information as a tip
+> - GOOD tip examples (what to aim for):
+>   * For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+>   * For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+>   * For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+>   * For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+> - GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+> - Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+355,368c359,373
+< CRITICAL GUIDANCE ON TIPS (Q5 Tip Usefulness):
+< Tips MUST be non-obvious, task-specific insights that beginners don't naturally know.
+< AVOID these common tip mistakes:
+< - DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+< - DO NOT suggest obvious troubleshooting steps that are already in the main steps
+< - DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+< - DO NOT suggest redundant information from the answer section
+< GOOD tip examples (what to aim for):
+< - For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+< - For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+< - For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+< - For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+< GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+< Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.
+---
+> CRITICAL GUIDANCE ON TIPS (Q6 Tip Usefulness):
+> - Tips MUST be non-obvious and provide task-specific insights that beginners don't naturally know.
+> - AVOID these common tip mistakes:
+>   * DO NOT suggest generic maintenance checks (e.g., 'check X periodically', 'inspect Y monthly')
+>   * DO NOT suggest obvious troubleshooting steps that are already in the main steps
+>   * DO NOT suggest irrelevant tools (e.g., using a level for painting or weather stripping)
+>   * DO NOT suggest redundant information from the answer section
+>   * DO NOT repeat safety information as a tip
+> - GOOD tip examples (what to aim for):
+>   * For a leaking faucet: 'Before replacing the entire cartridge, try tightening the packing nut under the handle—many leaks stop there'
+>   * For a clogged drain: 'Use a plunger with standing water for suction; dry plunging is less effective'
+>   * For an electrical outlet: 'If power is intermittent, the breaker may be failing, not the outlet'
+>   * For appliance repair: 'Listen for odd sounds during operation—grinding means the motor bearing is failing, not just a loose part'
+> - GOOD tips share:  specific conditions, counterintuitive insights, warnings about common false-fixes, or non-obvious root causes.
+> - Each tip should answer a 'Why does this work?' or 'Why do beginners miss this?' question.

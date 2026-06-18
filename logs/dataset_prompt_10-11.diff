@@ -1,0 +1,178 @@
+3,4c3,4
+< timestamp_utc: 2026-06-08T23:20:49.863453+00:00
+< iteration: 10
+---
+> timestamp_utc: 2026-06-10T22:16:05.227511+00:00
+> iteration: 11
+30,31c30,31
+< Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+< Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+---
+> Q1 Answer Completeness: answer must be a natural, unified narrative, not a stitched list.
+> Q2 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+33,38c33,34
+< Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+< Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+< Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+< Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+< Q8 Category Accuracy: content must match appliance_repair.
+< 
+---
+> Q4 Scope Appropriateness: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+> Q5 Context Clarity:Q6 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+41,43c37,39
+< - Safety guidance must be task-specific and hazard-specific.
+< - Tips should include practical, non-obvious insights a beginner might not know.
+< - Steps should include observable outcomes, quantities, or thresholds when relevant.
+---
+> - Safety guidance must be task-specific and specify a hazard it protects against.
+> - Tips should include practical, non-obvious, task specific insights a beginner might not know.
+> - Steps must be concrete and specific enough for beginners; avoid vague phrasing.
+61,62c57,58
+< - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+< - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+---
+> - Tools, in the tools list, need to be mentioned in the answer.
+> - Do not mention tools only in tools_required; answer MUST mention required tools and weave the critical tools into the repair narrative.
+64d59
+< - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+90c85
+< - AVOID: Generic checks, maintenance reminders, or redundant troubleshooting already in steps.
+---
+> - AVOID: Generic checks, maintenance reminders, or redundant troubleshooting already in steps.- CRITICAL Tool Realism guidance.  * Tools MUST be common homeowner tools.  * A thermostat, lid switch and ignitor are appliance parts and not a common homeowner tools.
+111,112c106,107
+< Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+< Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+---
+> Q1 Answer Completeness: answer must be a natural, unified narrative, not a stitched list.
+> Q2 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+114,119c109,110
+< Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+< Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+< Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+< Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+< Q8 Category Accuracy: content must match electrical_repair.
+< 
+---
+> Q4 Scope Appropriateness: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+> Q5 Context Clarity:Q6 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+122,124c113,115
+< - Safety guidance must be task-specific and hazard-specific.
+< - Tips should include practical, non-obvious insights a beginner might not know.
+< - Steps should include observable outcomes, quantities, or thresholds when relevant.
+---
+> - Safety guidance must be task-specific and specify a hazard it protects against.
+> - Tips should include practical, non-obvious, task specific insights a beginner might not know.
+> - Steps must be concrete and specific enough for beginners; avoid vague phrasing.
+142,143c133,134
+< - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+< - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+---
+> - Tools, in the tools list, need to be mentioned in the answer.
+> - Do not mention tools only in tools_required; answer MUST mention required tools and weave the critical tools into the repair narrative.
+145d135
+< - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+166c156
+< - Tips must be NON-OBVIOUS electrical insights, NOT safety reminders. Examples of GOOD tips:
+---
+> - Tips must be related and relevant to the repair and be NON-OBVIOUS electrical insights, NOT safety reminders. Examples of GOOD tips:
+171c161
+< - AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps.
+---
+>   * A tip about GFCI is unrelated to fixing a loose outlet.- AVOID: Generic safety warnings, basic tool reminders, or redundant troubleshooting steps.
+197,198c187,188
+< Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+< Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+---
+> Q1 Answer Completeness: answer must be a natural, unified narrative, not a stitched list.
+> Q2 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+200,205c190,191
+< Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+< Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+< Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+< Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+< Q8 Category Accuracy: content must match plumbing_repair.
+< 
+---
+> Q4 Scope Appropriateness: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+> Q5 Context Clarity:Q6 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+208,210c194,196
+< - Safety guidance must be task-specific and hazard-specific.
+< - Tips should include practical, non-obvious insights a beginner might not know.
+< - Steps should include observable outcomes, quantities, or thresholds when relevant.
+---
+> - Safety guidance must be task-specific and specify a hazard it protects against.
+> - Tips should include practical, non-obvious, task specific insights a beginner might not know.
+> - Steps must be concrete and specific enough for beginners; avoid vague phrasing.
+228,229c214,215
+< - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+< - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+---
+> - Tools, in the tools list, need to be mentioned in the answer.
+> - Do not mention tools only in tools_required; answer MUST mention required tools and weave the critical tools into the repair narrative.
+231d216
+< - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+278,279c263,264
+< Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+< Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+---
+> Q1 Answer Completeness: answer must be a natural, unified narrative, not a stitched list.
+> Q2 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+281,286c266,267
+< Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+< Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+< Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+< Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+< Q8 Category Accuracy: content must match hvac_maintenance.
+< 
+---
+> Q4 Scope Appropriateness: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+> Q5 Context Clarity:Q6 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+289,291c270,272
+< - Safety guidance must be task-specific and hazard-specific.
+< - Tips should include practical, non-obvious insights a beginner might not know.
+< - Steps should include observable outcomes, quantities, or thresholds when relevant.
+---
+> - Safety guidance must be task-specific and specify a hazard it protects against.
+> - Tips should include practical, non-obvious, task specific insights a beginner might not know.
+> - Steps must be concrete and specific enough for beginners; avoid vague phrasing.
+309,310c290,291
+< - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+< - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+---
+> - Tools, in the tools list, need to be mentioned in the answer.
+> - Do not mention tools only in tools_required; answer MUST mention required tools and weave the critical tools into the repair narrative.
+312d292
+< - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.
+364,365c344,345
+< Q1 Answer Coherence: answer must be a natural, unified narrative, not a stitched list.
+< Q2 Step Actionability: steps must be concrete and specific enough for beginners; avoid vague phrasing.
+---
+> Q1 Answer Completeness: answer must be a natural, unified narrative, not a stitched list.
+> Q2 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+367,372c347,348
+< Q4 Safety Specificity: safety_info must name the specific hazard and specific precaution; avoid generic warnings.
+< Q5 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+< Q6 Problem-Answer Alignment: answer must directly solve the exact problem in equipment_problem.
+< Q7 Appropriate Scope: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+< Q8 Category Accuracy: content must match general_home_repair.
+< 
+---
+> Q4 Scope Appropriateness: keep within realistic DIY scope; for risky repairs, clearly recommend professional help.
+> Q5 Context Clarity:Q6 Tip Usefulness: each tip must be non-obvious and add value beyond the steps.
+375,377c351,353
+< - Safety guidance must be task-specific and hazard-specific.
+< - Tips should include practical, non-obvious insights a beginner might not know.
+< - Steps should include observable outcomes, quantities, or thresholds when relevant.
+---
+> - Safety guidance must be task-specific and specify a hazard it protects against.
+> - Tips should include practical, non-obvious, task specific insights a beginner might not know.
+> - Steps must be concrete and specific enough for beginners; avoid vague phrasing.
+395,396c371,372
+< - If tools_required lists specific tools, explicitly reference them in the answer or steps so the tool list is visibly used.
+< - Do not mention tools only in tools_required; weave the critical tools into the repair narrative.
+---
+> - Tools, in the tools list, need to be mentioned in the answer.
+> - Do not mention tools only in tools_required; answer MUST mention required tools and weave the critical tools into the repair narrative.
+398d373
+< - Do not leave the user with only symptoms or only a tool list; every answer should close the loop.

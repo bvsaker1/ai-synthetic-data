@@ -267,8 +267,7 @@
                 usefulness. See dataset_prompt_8.log
 
 - **Hypothesis**: The category appliance tip usefulness failure will fall toward
-                the 20% failure rate
-                will lower significantly. The goal is down to 20%.
+                the 20% failure rate.
 
 - **Result**: - Tip Usefulness for category Appliance failures fell to 0% and 15%
                 across all categories which is within spec.  
@@ -314,7 +313,7 @@
 ### Iteration 10: Fix 75% UNRESOLVED rate for category electrical for Scope 
                 Appropriateness, HVAC for Tool Realism and Tip Usefulness 
                 and Plumbing Answer Completeness
-- **Date**: 2026-06-05
+- **Date**: 2026-06-09
 - **Change**: 
                 - Updated the electrical category template prompt and targeted 
                 scope appropriateness regarding panel upgrades. See 
@@ -330,7 +329,118 @@
                 qualites to fall toward the overall 20% failure rate and corrected
                 quality shortcomings of the mentioned categories.
 
-- **Result**: - TBD
+- **Result**: - According to the heatmap 
+                * Electrical Scope Appropriateness failure dropped from 75% 
+                failure to 25%
+                * HVAC Tool Realism failure dropped from 75% to 0%.
+                * HVAC Tip Usefulness failure dropped from 75% to 0%.
+                * Appliance Answer Completeness failure rose from 0% to 75%.
+                * Appliance Tool Realism failure rose from 25% to 75%.
+                * General Home Safety Specificity failure rose from 0% to 50%
+                * Electrical Tip Usefulness failure rose from 0% to 50%
+                * Overall pass dropped from 45% to 40%.
+                * Targeted areas improved but other areas regressed.
 
-- **Decision**: TBD
-- **Next step**: TBD
+- **Decision**: - Continue with more prompt tuning for areas that regressed
+                since quality dimension failure rates are still greater than 
+                20%.
+
+- **Next step**: - Tune the prompt for the Appliance Answer Completeness, Tool 
+                Realism
+                - Tune the prompt for General Home Safety Specificity
+                - Tune the prompt for Electrical Tip Usefulness
+
+### Iteration 11: Fix  UNRESOLVED rate for Appliance Answer Completenes, Tool
+                Realism and Home Safety and Electrical Tip Usefulness 
+- **Date**: 2026-06-10
+- **Change**: 
+                - Appliance Answer Completeness changed prompt to require
+                tools in the answer.
+                - Appliance Tool Realism changed prompt to disallow unrealistic
+                tools with examples.
+                - General Home Safety Specificity changed prompt to require
+                a specific hazard warning.
+                - Electrical Tip Usefulness change prompt to require tips to be 
+                relevant with examples.
+
+- **Hypothesis**: The prompt corrections will cause the failure rate of those
+                qualites to fall toward the overall 20% failure rate and corrected
+                quality shortcomings of the mentioned categories.
+
+- **Result**: - According to the heatmap 
+                * Appliance Answer Completeness failure dropped from 75% 
+                failure to 0%.
+                * Appliance Tool Realism failure dropped from 75% to 25%.
+                * General Home Safety Specificity failure dropped from 50% to 25%.
+                * Electrical Tip Usefulness failure dropped from 50% to 25%.
+                * Appliance Tip Usefulness rose from 25% to 75%.
+                * HVAC Tip Usefulness rose from 0% to 50%.
+                * Tip Usefulness in general failure rate rose from 20% to 35%.
+                * Overall pass rate went from 40% to 30%.
+
+- **Decision**: - Continue with more prompt tuning for Tip Usefulness that regressed and
+                has a quality failure rate above 20% (ie 35%).
+
+- **Next step**: - Tune the prompt for the Appliance Tip Usefulness and HVAC 
+                Tip Usefulness. Update Electrical scope rule for breaker
+                replacement.
+
+### Iteration 12: Fix  UNRESOLVED rate for Appliance and HVAC Tip Usefulness
+- **Date**: 2026-06-10
+- **Change**: 
+                - Tip Usefulness should not repeat safety information as a tip.
+                - Electrical Scope rule that says that replacing a circuit
+                breaker is out of scope and should be done by an electrician.
+                - Formatting and fix issue to make quality numbers match actual 
+                quality.
+
+- **Hypothesis**: The prompt corrections will cause the failure rate of those
+                qualites to fall toward the overall 20% failure rate and corrected
+                quality shortcomings of the mentioned categories. Improve the 
+                overall quality pass rate.
+
+- **Result**: - According to the heatmap 
+                * All individual qualities pass at an 85% rate or better.
+                * Overall pass rate went from 30% to 70%.
+
+- **Decision**: - Continue with more prompt tuning to try and get overall 
+                quality pass rate at 80% or above.
+
+- **Next step**: - Tune the Plumbing prompt for the Complete Answer to have 
+                an example where a wrench should be mentioned in the answer if 
+                it is in the tools list.
+                - Tune the HVAC Safety to make safety hazard specific.
+                - Tune the Appliance Scope to make refrigerant checking a task
+                for professionals.
+
+### Iteration 13: Fix overall UNRESOLVED rate by tuning prompt for Plumbing,
+                HVAC and Appliance.
+- **Date**: 2026-06-10
+- **Change**: 
+                - Tune the Plumbing prompt for the Complete Answer to have 
+                an example where a wrench should be mentioned in the answer if 
+                it is in the tools list.
+                - Tune the HVAC Safety to make safety hazard specific.
+                - Tune the Appliance Scope to make refrigerant checking a task
+                for professionals.
+
+- **Hypothesis**: The prompt corrections will cause the overall pass rate 
+                to be at 80% or above.
+
+- **Result**: - According to the heatmap 
+                * Overall pass rate dropped from 70% to 60%. 
+                * Appliance Tip Usefulness failure rate rose to 75%.
+                * Appliance and Electrical Answer Completeness failure rate
+                rose to 50%.
+
+- **Decision**: - It appears that results deteriorated for this iteraton.
+                Iteration 12 was the best overall and only fell short in the
+                overall resolved pass rate at 10% short of the 80% target. I 
+                was using the GPT OSS model because it is open source, and I 
+                was able to achieve around 70% accuracy. However, one issue I 
+                identified is that GPT OSS has a knowledge cutoff and does not 
+                perform as efficiently as OpenAI’s closed source models for 
+                this type of LLM-as-a-judge task.
+
+- **Next step**: - No further steps needed.
+

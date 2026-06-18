@@ -23,6 +23,8 @@ HVAC_SPECIFIC_PROMPT_INFO = (
 	"  * For a question on how to fix a faulty thermostat DO NOT give tips saying that a faulty thermostat can cause uneven heating.\n"
 	"  * For a question on why furnace is not turning on, a tip saying that a faulty thermostat can cause the furnace not to turn on is obvious and should be in the answer not the tip.\n"
 	"  * For a question on why furnace is not heating, cleaning the ignition sensor or checking for debris on the pilot should not be tips if is something already in the answer with instructions to check.\n"
+	"- SAFETY SPECIFICATION (Q2): Safety hazard must be specific and NOT vague.\n"
+	"- SCOPE APPROPRIATENESS (Q4): Refrigerant checking out of scope and should be done by a professional."
 )
 
 

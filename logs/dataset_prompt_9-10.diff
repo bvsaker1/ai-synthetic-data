@@ -1,0 +1,28 @@
+3,4c3,4
+< timestamp_utc: 2026-06-04T23:56:48.929033+00:00
+< iteration: 9
+---
+> timestamp_utc: 2026-06-08T23:20:49.863453+00:00
+> iteration: 10
+171a172,176
+> - CRITICAL GUIDANCE ON SCOPE APPROPRIATENESS (Q4 Scope Appropriateness):
+>   * Scope Appropriateness MUST keep in mind the limitations of normal home owner.
+>   * Replacing an electrical panel is out of scope and should be done by an electrician. However, replacing a circuit breaker is ok.
+>   * Adding a new circuit to an electrical panel is out of scope and should be done by an electrician.
+>   * Wiring an entire room is out of scope because the task is too big to be done in under an hour.
+249a255,257
+> - CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q1 Answer Completeness):
+>   * Answers should mention the need and use of plumber's tape for repairs that need it.
+>   * Tools listed MUST be explicity mentioned or clearly implied in the answer.
+327c335,343
+< - AVOID: Generic filter reminders, obvious maintenance checklists, or redundant diagnostic steps.
+---
+> - AVOID: Generic filter reminders, obvious maintenance checklists, or redundant diagnostic steps.- CRITICAL GUIDANCE ON TOOL REALISM (Q3 Tool Realism):
+>   * A thermostat or pilot light are not normal homeowner tools and cost more than $50.
+>   * A refrigerant leak detector is not a normal homeowner tool and it's use is out of scope.
+> - CRITICAL GUIDANCE ON TIP USEFULNESS (Q6 Tip Usefulness):
+>   * Tips MUST NOT be vague and obvious.
+> Examples to follow:
+>   * For a question on how to fix a faulty thermostat DO NOT give tips saying that a faulty thermostat can cause uneven heating.
+>   * For a question on why furnace is not turning on, a tip saying that a faulty thermostat can cause the furnace not to turn on is obvious and should be in the answer not the tip.
+>   * For a question on why furnace is not heating, cleaning the ignition sensor or checking for debris on the pilot should not be tips if is something already in the answer with instructions to check.

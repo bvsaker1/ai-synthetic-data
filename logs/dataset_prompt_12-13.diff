@@ -1,0 +1,11 @@
+3,4c3,4
+< timestamp_utc: 2026-06-10T23:34:50.349520+00:00
+< iteration: 12
+---
+> timestamp_utc: 2026-06-11T00:44:27.537691+00:00
+> iteration: 13
+245a246
+>   * A wrench should be mentioned in the answer if it is in the tools list.
+327a329,330
+> - SAFETY SPECIFICATION (Q2): Safety hazard must be specific and NOT vague.
+> - SCOPE APPROPRIATENESS (Q4): Refrigerant checking out of scope and should be done by a professional.

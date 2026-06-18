@@ -17,7 +17,8 @@ PLUMBING_SPECIFIC_PROMPT_INFO = (
 	"- AVOID: Generic maintenance checks, obvious preventive actions, or redundant drain/leak troubleshooting.\n"
 	"- CRITICAL GUIDANCE ON ANSWER COMPLETENESS (Q1 Answer Completeness):\n"
 	"  * Answers should mention the need and use of plumber's tape for repairs that need it.\n"
-	"  * Tools listed MUST be explicity mentioned or clearly implied in the answer."
+	"  * Tools listed MUST be explicity mentioned or clearly implied in the answer.\n"
+	"  * A wrench should be mentioned in the answer if it is in the tools list.\n"
 )
 
 
