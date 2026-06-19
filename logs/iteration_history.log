@@ -64,8 +64,8 @@
                 stricter than human on all qualities with the widest gap on 
                 "Answer Completeness".
                 
-                Answer Completeness 55%
-                Overall Pass Rate 65%
+                Answer Completeness 60%
+                Overall Pass Rate 70%
 
 - **Decision**: The judge does not meet the 80% agreement threshold with 
                 human labels for Answer Completeness.
@@ -193,10 +193,10 @@
 - **Hypothesis**: The human and LLM judge agreement on Answer Completeness will
                 improve with the clarified general rules for judging.
 
-- **Result**: The answer completeness judge agreement dropped from 75% to 65%.
+- **Result**: The answer completeness judge agreement rose from 45% to 75%.
 
-- **Decision**: Iteration 6 was worse than iteration 5 so try one more
-                iteration to bring Answer Completeness up higher.
+- **Decision**: Iteration 6 was better than iteration 5 but answer completeness
+                was below the 80% agreement target. Try one more iteration.
 
 - **Next step**: Update the judge prompt to fail vagueness in answers with a 
                 couple of examples. 
@@ -234,10 +234,10 @@
 - **Result**: The answer completeness judge agreement dropped from 75% to 65%.
 
 - **Decision**: Iteration 7 was worse than iteration 6. It has been decided that
-                75% agreement is good enough we will revert to iteration 6 judge
-                prompts and call it good. Now evaluate the judge eval on the 
-                human labels dataset in order to tune the dataset generation
-                prompt.
+                75% agreement, for answer completeness, is good enough. We will 
+                revert to iteration 6 judge prompts and call it good. Now 
+                evaluate the judge eval on the human labels dataset in order 
+                to tune the dataset generation prompt.
 
 - **Next step**: Evaluate the analysis on the human labels dataset and tune the
                 dataset generation prompt for the worst category. According to 

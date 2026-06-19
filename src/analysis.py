@@ -581,8 +581,10 @@ def main() -> None:
         else:
             assert human_df is not None
             log_label_differences(analysis_logger, iteration, human_df, judge_df)
-            save_pass_rate_chart(human_df, judge_df, iteration, out_dir)
-            save_agreement_chart(human_df, judge_df, iteration, out_dir)
+            # Only generate pass rate and agreement charts for judge tuning iterations (1-7)
+            if iteration <= 7:
+                save_pass_rate_chart(human_df, judge_df, iteration, out_dir)
+                save_agreement_chart(human_df, judge_df, iteration, out_dir)
 
         save_heatmap_chart(judge_df, iteration, out_dir)
     if args.judge_only:
@@ -595,8 +597,10 @@ def main() -> None:
         dataset_df = pd.DataFrame(dataset_rows)
         save_category_distribution_chart(dataset_df, out_dir)
 
-        save_dataset_quality_by_iteration_chart(human_df, judge_by_iteration, out_dir)
-        save_agreement_by_iteration_chart(human_df, judge_by_iteration, out_dir)
+        # Filter to judge tuning iterations only (1-7); iterations 8+ are dataset generation tuning
+        judge_tuning_iterations = {k: v for k, v in judge_by_iteration.items() if k <= 7}
+        save_dataset_quality_by_iteration_chart(human_df, judge_tuning_iterations, out_dir)
+        save_agreement_by_iteration_chart(human_df, judge_tuning_iterations, out_dir)
 
     generated_files = sorted(out_dir.glob("*.png"))
     print("Generated visualizations:")
