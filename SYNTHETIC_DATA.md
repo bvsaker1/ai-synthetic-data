@@ -32,6 +32,10 @@ The purpose is to create a system that can:
 - Dataset generation model: llama-3.3-70b-versatile
 - LLM-as-Judge model: openai/gpt-oss-120b
 
+## Running the Project
+
+For environment setup, dependency installation, and step-by-step commands to run the generator, validator, judge, analysis scripts, tests, and the overall pipeline, see [README.md](/Users/bvsaker/Dev/ai-bootcamp/mini-project1/README.md).
+
 ## Core Data Schema (7 Fields)
 
 Each generated item is expected to conform to a 7-field structure used throughout generation, validation, and judging:
