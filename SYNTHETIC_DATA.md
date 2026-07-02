@@ -29,12 +29,13 @@ The purpose is to create a system that can:
 - Instructor: structured output / schema-safe LLM responses
 - Matplotlib + Seaborn: charting and visualization
 - Pydantic: schema and structural validation
+- Pytest: testing the python scripts
 - Dataset generation model: llama-3.3-70b-versatile
 - LLM-as-Judge model: openai/gpt-oss-120b
 
 ## Running the Project
 
-For environment setup, dependency installation, and step-by-step commands to run the generator, validator, judge, analysis scripts, tests, and the overall pipeline, see [README.md](/Users/bvsaker/Dev/ai-bootcamp/mini-project1/README.md).
+For environment setup, dependency installation, and step-by-step commands to run the generator, validator, judge, analysis scripts, tests, and the overall pipeline, see [README.md](README.md).
 
 ## Core Data Schema (7 Fields)
 
